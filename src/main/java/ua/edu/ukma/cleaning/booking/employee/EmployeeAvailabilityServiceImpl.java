@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.booking.availibility.employee;
+package ua.edu.ukma.cleaning.booking.employee;
 
 
 import lombok.RequiredArgsConstructor;

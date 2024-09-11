@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.edu.ukma.cleaning.user.dto.*;
@@ -13,6 +14,7 @@ import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityExcept
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.PhoneNumberDuplicateException;
 import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
 
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -82,5 +84,23 @@ public class UserServiceImpl implements UserService {
         Page<UserEntity> users = userRepository.findAllByRole(role, pageable);
         int totalPages = users.getTotalPages();
         return new UserPageDto(pageable.getPageNumber(), totalPages, userMapper.toUserListDto(users.stream().toList()));
+    }
+
+    @ApplicationModuleListener
+    public void hireEmployee(EmployeeHireEvent event) {
+        UserEntity employee = event.employee();
+        employee.setAddressList(Collections.emptyList());
+        employee.setRole(Role.EMPLOYEE);
+        userRepository.save(employee);
+        log.info("Employee successfully hired: {}", employee);
+    }
+
+    @ApplicationModuleListener
+    public void fireEmployee(EmployeeFireEvent event) {
+        UserEntity employee = event.employee();
+        employee.setRole(Role.USER);
+        userRepository.save(employee);
+        log.info("User id = {} was fired by Admin id = {}", employee.getId(),
+                SecurityContextAccessor.getAuthenticatedUserId());
     }
 }

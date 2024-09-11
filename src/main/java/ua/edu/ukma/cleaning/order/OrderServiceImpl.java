@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
         log.info("Order with id = {} successfully created", entity.getId());
-        eventPublisher.publishEvent(new OrderEvent(LocalDateTime.now(), "Order with id: " + orderDto.getId() + "created successfully"));
+        eventPublisher.publishEvent(new OrderEvent("Order with id: " + orderDto.getId() + "created successfully"));
         return orderDto;
     }
 

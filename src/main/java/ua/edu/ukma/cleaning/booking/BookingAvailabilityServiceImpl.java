@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.booking.availibility;
+package ua.edu.ukma.cleaning.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

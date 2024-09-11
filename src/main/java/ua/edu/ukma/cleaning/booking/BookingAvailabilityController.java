@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.booking.availibility;
+package ua.edu.ukma.cleaning.booking;
 
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.ukma.cleaning.booking.availibility.employee.EmployeeAvailabilityService;
+import ua.edu.ukma.cleaning.booking.employee.EmployeeAvailabilityService;
 import ua.edu.ukma.cleaning.user.dto.EmployeeDto;
 
 import java.time.Duration;
