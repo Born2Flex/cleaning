@@ -1,0 +1,34 @@
+@startuml
+set separator none
+title CleaningApplication
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Component>
+
+Container_Boundary("CleaningApplication.CleaningApplication_boundary", "CleaningApplication", $tags="") {
+  Component(CleaningApplication.CleaningApplication.Notification, "Notification", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.Booking, "Booking", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.Utils, "Utils", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.Employment, "Employment", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.User, "User", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.CommercialProposal, "CommercialProposal", $techn="Module", $descr="", $tags="", $link="")
+  Component(CleaningApplication.CleaningApplication.Order, "Order", $techn="Module", $descr="", $tags="", $link="")
+}
+
+Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.CommercialProposal, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Booking, CleaningApplication.CleaningApplication.Order, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Booking, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.CommercialProposal, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.Order, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Notification, CleaningApplication.CleaningApplication.Order, "listens to", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.User, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml
