@@ -1,14 +1,11 @@
 package ua.edu.ukma.cleaning.employment;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 import ua.edu.ukma.cleaning.user.UserMapper;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface EmploymentMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),

@@ -4,8 +4,8 @@ package ua.edu.ukma.cleaning.commercialProposal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ua.edu.ukma.cleaning.utils.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.utils.exceptions.ProposalNameDuplicateException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.ProposalNameDuplicateException;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.cleaning.order.dto.*;
-import ua.edu.ukma.cleaning.review.ReviewDto;
+import ua.edu.ukma.cleaning.order.review.ReviewDto;
 
 @RestController
 @RequestMapping("/api/orders")

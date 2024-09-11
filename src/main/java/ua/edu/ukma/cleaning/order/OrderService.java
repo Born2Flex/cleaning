@@ -2,7 +2,7 @@ package ua.edu.ukma.cleaning.order;
 
 import org.springframework.data.domain.Pageable;
 import ua.edu.ukma.cleaning.order.dto.*;
-import ua.edu.ukma.cleaning.review.*;
+import ua.edu.ukma.cleaning.order.review.ReviewDto;
 
 import java.util.List;
 

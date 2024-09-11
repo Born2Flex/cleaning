@@ -1,7 +1,7 @@
 package ua.edu.ukma.cleaning.utils.exceptionHandler;
 
 
-import ua.edu.ukma.cleaning.utils.exceptions.*;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;

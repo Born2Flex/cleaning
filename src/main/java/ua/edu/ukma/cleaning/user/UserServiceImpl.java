@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.edu.ukma.cleaning.user.dto.*;
-import ua.edu.ukma.cleaning.utils.exceptions.EmailDuplicateException;
-import ua.edu.ukma.cleaning.utils.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.utils.exceptions.PhoneNumberDuplicateException;
-import ua.edu.ukma.cleaning.utils.security.SecurityContextAccessor;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.EmailDuplicateException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.PhoneNumberDuplicateException;
+import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
 
 import java.util.Objects;
 import java.util.Optional;

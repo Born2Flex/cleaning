@@ -1,7 +1,7 @@
 package ua.edu.ukma.cleaning.order;
 
 import org.mapstruct.*;
-import ua.edu.ukma.cleaning.address.AddressMapper;
+import ua.edu.ukma.cleaning.user.address.AddressMapper;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.dto.OrderCreationDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForAdminDto;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {AddressMapper.class, UserMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {AddressMapper.class, UserMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface OrderMapper {
     @Mappings({
             @Mapping(target = "creationTime", expression = "java(java.time.LocalDateTime.now())"),

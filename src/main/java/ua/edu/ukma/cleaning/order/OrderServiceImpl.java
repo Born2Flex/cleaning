@@ -2,22 +2,24 @@ package ua.edu.ukma.cleaning.order;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ua.edu.ukma.cleaning.address.AddressMapper;
-import ua.edu.ukma.cleaning.address.AddressRepository;
+import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.cleaning.user.address.AddressMapper;
+import ua.edu.ukma.cleaning.user.address.AddressRepository;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
-import ua.edu.ukma.cleaning.notification.NotificationService;
 import ua.edu.ukma.cleaning.order.dto.*;
-import ua.edu.ukma.cleaning.review.ReviewDto;
-import ua.edu.ukma.cleaning.review.ReviewMapper;
+import ua.edu.ukma.cleaning.order.review.ReviewDto;
+import ua.edu.ukma.cleaning.order.review.ReviewMapper;
 import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.utils.exceptions.AccessDeniedException;
-import ua.edu.ukma.cleaning.utils.exceptions.CantChangeEntityException;
-import ua.edu.ukma.cleaning.utils.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.utils.security.SecurityContextAccessor;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AccessDeniedException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,14 +30,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final CommercialProposalRepository commercialProposalRepository;
     private final OrderMapper orderMapper;
+    private final CommercialProposalRepository commercialProposalRepository;
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
     private final ReviewMapper reviewMapper;
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
+    @Transactional
     public OrderForUserDto createOrder(OrderCreationDto order) {
         OrderEntity entity = orderMapper.toEntity(order);
         entity.setClient(SecurityContextAccessor.getAuthenticatedUser());
@@ -51,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
         log.info("Order with id = {} successfully created", entity.getId());
+        eventPublisher.publishEvent(new OrderEvent(LocalDateTime.now(), "Order with id: " + orderDto.getId() + "created successfully"));
         return orderDto;
     }
 

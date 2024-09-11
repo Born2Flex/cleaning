@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ua.edu.ukma.cleaning.address.AddressEntity;
+import ua.edu.ukma.cleaning.user.address.AddressEntity;
 
 import java.util.Collection;
 import java.util.List;

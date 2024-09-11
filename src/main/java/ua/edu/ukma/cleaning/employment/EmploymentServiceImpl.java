@@ -10,10 +10,10 @@ import ua.edu.ukma.cleaning.order.Status;
 import ua.edu.ukma.cleaning.user.Role;
 import ua.edu.ukma.cleaning.user.UserEntity;
 import ua.edu.ukma.cleaning.user.UserRepository;
-import ua.edu.ukma.cleaning.utils.exceptions.AlreadyAppliedException;
-import ua.edu.ukma.cleaning.utils.exceptions.CantChangeEntityException;
-import ua.edu.ukma.cleaning.utils.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.utils.security.SecurityContextAccessor;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
+import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
