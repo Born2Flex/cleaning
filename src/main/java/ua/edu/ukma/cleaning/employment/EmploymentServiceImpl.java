@@ -21,8 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmploymentServiceImpl implements EmploymentService {
     private final EmploymentRepository repository;
-    private final EmploymentMapper mapper;
+    private final EmploymentMapper employmentMapper;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final OrderRepository orderRepository;
     private final ApplicationEventPublisher applicationPublisher;
 
@@ -32,10 +33,10 @@ public class EmploymentServiceImpl implements EmploymentService {
             log.info("User id = {} try to send more than 1 application for a job", SecurityContextAccessor.getAuthenticatedUserId());
             throw new AlreadyAppliedException("You have already applied for this position");
         }
-        EmploymentEntity employmentRequest = mapper.toEntity(motivationList);
+        EmploymentEntity employmentRequest = employmentMapper.toEntity(motivationList);
         employmentRequest.setApplicant(SecurityContextAccessor.getAuthenticatedUser());
         log.info("Created new employment request with id = {}", employmentRequest.getId());
-        return mapper.toDto(repository.save(employmentRequest));
+        return employmentMapper.toDto(repository.save(employmentRequest));
     }
 
     @Transactional
@@ -44,7 +45,7 @@ public class EmploymentServiceImpl implements EmploymentService {
         UserEntity user = findUserOrThrow(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
         repository.delete(employmentRequest);
-        applicationPublisher.publishEvent(new EmployeeHireEvent(user));
+        applicationPublisher.publishEvent(new EmployeeHireEvent(userMapper.toDto(user)));
         log.debug("Admin id = {} accepted Employment request id = {}",
                 SecurityContextAccessor.getAuthenticatedUserId(), employmentRequest.getId());
         return true;
@@ -61,9 +62,10 @@ public class EmploymentServiceImpl implements EmploymentService {
 
     @Override
     public List<EmploymentDto> getAll() {
-        return mapper.toDtoList(repository.findAll());
+        return employmentMapper.toDtoList(repository.findAll());
     }
 
+    @Transactional
     @Override
     public Boolean unemployment(Long userId) {
         UserEntity employee = findUserOrThrow(userId);
@@ -76,7 +78,7 @@ public class EmploymentServiceImpl implements EmploymentService {
                     + ", can`t unemploy user with id: " + employee.getId());
             throw new CantChangeEntityException("Can`t unemploy this user");
         }
-        applicationPublisher.publishEvent(new EmployeeFireEvent(employee));
+        applicationPublisher.publishEvent(new EmployeeFireEvent(userMapper.toDto(employee)));
         return true;
     }
 

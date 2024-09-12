@@ -3,7 +3,9 @@ package ua.edu.ukma.cleaning.commercialProposal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.ProposalNameDuplicateException;
 
@@ -15,7 +17,9 @@ import java.util.List;
 public class CommercialProposalServiceImpl implements CommercialProposalService {
     private final CommercialProposalRepository commercialProposalRepository;
     private final CommercialProposalMapper mapper;
+    private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional
     @Override
     public CommercialProposalDto create(CommercialProposalDto commercialProposal) {
         if (commercialProposalRepository.findCommercialProposalEntityByName(commercialProposal.getName()).isPresent()) {
@@ -23,7 +27,9 @@ public class CommercialProposalServiceImpl implements CommercialProposalService 
             throw new ProposalNameDuplicateException("Commercial proposal name should be unique!");
         }
         log.info("Created commercial proposal with id = {}", commercialProposal.getId());
-        return mapper.toDto(commercialProposalRepository.save(mapper.toEntity(commercialProposal)));
+        CommercialProposalDto createdProposal = mapper.toDto(commercialProposalRepository.save(mapper.toEntity(commercialProposal)));
+        eventPublisher.publishEvent(new NewCommercialProposalEvent(createdProposal));
+        return createdProposal;
     }
 
     @Override

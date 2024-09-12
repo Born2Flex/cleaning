@@ -19,7 +19,6 @@ import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityEx
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -54,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
         log.info("Order with id = {} successfully created", entity.getId());
-        eventPublisher.publishEvent(new OrderEvent("Order with id: " + orderDto.getId() + "created successfully"));
+        eventPublisher.publishEvent(new OrderCreationEvent("Order with id: " + orderDto.getId() + "created successfully"));
         return orderDto;
     }
 

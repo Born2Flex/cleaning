@@ -1,3 +1,5 @@
 package ua.edu.ukma.cleaning.user;
 
-public record EmployeeHireEvent(UserEntity employee) {}
+import ua.edu.ukma.cleaning.user.dto.UserDto;
+
+public record EmployeeHireEvent(UserDto employee) {}

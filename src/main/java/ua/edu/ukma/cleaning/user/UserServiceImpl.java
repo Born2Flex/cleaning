@@ -3,11 +3,13 @@ package ua.edu.ukma.cleaning.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.user.dto.*;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.EmailDuplicateException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public UserDto create(UserRegistrationDto user) {
@@ -71,11 +74,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userEntity);
     }
 
+    @Transactional
     @Override
     public UserDto updatePassword(UserPasswordDto user) {
         UserEntity userEntity = SecurityContextAccessor.getAuthenticatedUser();
         userEntity.setPassword(encoder.encode(user.getPassword()));
         log.info("Password of user id = {} was changed", user.getId());
+        eventPublisher.publishEvent(new UserPasswordChangedEvent(userEntity.getEmail()));
         return userMapper.toDto(userRepository.save(userEntity));
     }
 
@@ -88,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @ApplicationModuleListener
     public void hireEmployee(EmployeeHireEvent event) {
-        UserEntity employee = event.employee();
+        UserEntity employee = userMapper.toEntity(event.employee());
         employee.setAddressList(Collections.emptyList());
         employee.setRole(Role.EMPLOYEE);
         userRepository.save(employee);
@@ -97,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
     @ApplicationModuleListener
     public void fireEmployee(EmployeeFireEvent event) {
-        UserEntity employee = event.employee();
+        UserEntity employee = userMapper.toEntity(event.employee());
         employee.setRole(Role.USER);
         userRepository.save(employee);
         log.info("User id = {} was fired by Admin id = {}", employee.getId(),

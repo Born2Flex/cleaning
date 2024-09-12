@@ -17,6 +17,8 @@ public interface UserMapper {
     })
     UserEntity toEntity(UserRegistrationDto user, @Context PasswordEncoder passwordEncoder);
 
+    UserEntity toEntity(UserDto user);
+
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "addressList", ignore = true),
