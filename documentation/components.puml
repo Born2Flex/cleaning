@@ -18,17 +18,19 @@ Container_Boundary("CleaningApplication.CleaningApplication_boundary", "Cleaning
   Component(CleaningApplication.CleaningApplication.Order, "Order", $techn="Module", $descr="", $tags="", $link="")
 }
 
+Rel(CleaningApplication.CleaningApplication.User, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.CommercialProposal, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.CommercialProposal, "uses", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Notification, CleaningApplication.CleaningApplication.User, "listens to", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Notification, CleaningApplication.CleaningApplication.CommercialProposal, "listens to", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.Notification, CleaningApplication.CleaningApplication.Order, "listens to", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Booking, CleaningApplication.CleaningApplication.Order, "uses", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Booking, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
-Rel(CleaningApplication.CleaningApplication.CommercialProposal, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Employment, CleaningApplication.CleaningApplication.Order, "uses", $techn="", $tags="", $link="")
-Rel(CleaningApplication.CleaningApplication.Notification, CleaningApplication.CleaningApplication.Order, "listens to", $techn="", $tags="", $link="")
-Rel(CleaningApplication.CleaningApplication.User, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 
 SHOW_LEGEND(true)
 @enduml

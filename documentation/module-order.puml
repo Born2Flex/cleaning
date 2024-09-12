@@ -15,11 +15,11 @@ Container_Boundary("CleaningApplication.CleaningApplication_boundary", "Cleaning
   Component(CleaningApplication.CleaningApplication.Order, "Order", $techn="Module", $descr="", $tags="", $link="")
 }
 
+Rel(CleaningApplication.CleaningApplication.User, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
+Rel(CleaningApplication.CleaningApplication.CommercialProposal, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.User, "uses", $techn="", $tags="", $link="")
 Rel(CleaningApplication.CleaningApplication.Order, CleaningApplication.CleaningApplication.CommercialProposal, "uses", $techn="", $tags="", $link="")
-Rel(CleaningApplication.CleaningApplication.CommercialProposal, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
-Rel(CleaningApplication.CleaningApplication.User, CleaningApplication.CleaningApplication.Utils, "depends on", $techn="", $tags="", $link="")
 
 SHOW_LEGEND(true)
 @enduml
