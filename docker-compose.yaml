@@ -1,0 +1,28 @@
+version: '3'
+services:
+  cleaning:
+    image: "born2flex/cleaning:latest"
+    container_name: "cleaning-app"
+    links:
+      - cleaning_db
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cleaning-db:5432/cleaning
+      - SPRING_DATASOURCE_USERNAME=cleaningadmin
+      - SPRING_DATASOURCE_PASSWORD=bestcleaning
+
+  cleaning_db:
+    image: "postgres:latest"
+    container_name: "cleaning-db"
+    ports:
+      - "5312:5432"
+    environment:
+      POSTGRES_USER: cleaningadmin
+      POSTGRES_PASSWORD: bestcleaning
+      POSTGRES_DB: cleaning
+    volumes:
+      - cleaning-data:/var/lib/postgres/data
+
+volumes:
+  cleaning-data:
