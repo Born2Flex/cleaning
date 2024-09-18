@@ -1,110 +1,84 @@
-CREATE TABLE IF NOT EXISTS `users`
+CREATE TABLE IF NOT EXISTS users
 (
-    `id`           bigint                           NOT NULL AUTO_INCREMENT,
-    `name`         varchar(255) DEFAULT NULL,
-    `surname`      varchar(255) DEFAULT NULL,
-    `patronymic`   varchar(255) DEFAULT NULL,
-    `email`        varchar(255)                     NOT NULL,
-    `password`     varchar(255)                     NOT NULL,
-    `role`         enum ('USER','EMPLOYEE','ADMIN') NOT NULL,
-    `phone_number` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
-    UNIQUE KEY `UK_4bgmpi98dylab6qdvf9xyaxu4` (`phone_number`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    id           BIGSERIAL PRIMARY KEY,
+    name         VARCHAR(255) DEFAULT NULL,
+    surname      VARCHAR(255) DEFAULT NULL,
+    patronymic   VARCHAR(255) DEFAULT NULL,
+    email        VARCHAR(255) NOT NULL UNIQUE,
+    password     VARCHAR(255) NOT NULL,
+    role         VARCHAR(255) NOT NULL CHECK (role IN ('USER', 'EMPLOYEE', 'ADMIN')),
+    phone_number VARCHAR(255) DEFAULT NULL UNIQUE
+);
 
-CREATE TABLE IF NOT EXISTS `addresses`
+CREATE TABLE IF NOT EXISTS addresses
 (
-    `id`           bigint       NOT NULL AUTO_INCREMENT,
-    `city`         varchar(255) NOT NULL,
-    `street`       varchar(255) NOT NULL,
-    `house_number` varchar(255) NOT NULL,
-    `flat_number`  varchar(255) DEFAULT NULL,
-    `zip`          varchar(255) DEFAULT NULL,
-    `user_id`      bigint       DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKda8tuywtf0gb6sedwk7la1pgi` (`user_id`),
-    CONSTRAINT `FKda8tuywtf0gb6sedwk7la1pgi` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    id           BIGSERIAL PRIMARY KEY,
+    city         VARCHAR(255) NOT NULL,
+    street       VARCHAR(255) NOT NULL,
+    house_number VARCHAR(255) NOT NULL,
+    flat_number  VARCHAR(255) DEFAULT NULL,
+    zip          VARCHAR(255) DEFAULT NULL,
+    user_id      BIGINT,
+    CONSTRAINT FKda8tuywtf0gb6sedwk7la1pgi FOREIGN KEY (user_id) REFERENCES users (id)
+);
 
-CREATE TABLE IF NOT EXISTS `commercial_proposals`
+CREATE TABLE IF NOT EXISTS commercial_proposals
 (
-    `id`                bigint                       NOT NULL AUTO_INCREMENT,
-    `name`              varchar(255)                 NOT NULL,
-    `short_description` varchar(100) DEFAULT NULL,
-    `full_description`  varchar(500) DEFAULT NULL,
-    `price`             double                       NOT NULL,
-    `duration`          decimal(21, 0)               NOT NULL,
-    `count_of_employee` int                          NOT NULL,
-    `deleted`           bit(1)       DEFAULT FALSE,
-    `type`              enum ('PER_AREA','PER_ITEM') NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_a2l3whnjhqv37ftofa7vn66q8` (`name`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    id                BIGSERIAL PRIMARY KEY,
+    name              VARCHAR(255) NOT NULL UNIQUE,
+    short_description VARCHAR(100) DEFAULT NULL,
+    full_description  VARCHAR(500) DEFAULT NULL,
+    price             DOUBLE PRECISION NOT NULL,
+    duration          NUMERIC(21, 0) NOT NULL,
+    count_of_employee INT NOT NULL,
+    deleted           BOOLEAN DEFAULT FALSE,
+    type              VARCHAR(255) NOT NULL CHECK (type IN ('PER_AREA', 'PER_ITEM'))
+);
 
-CREATE TABLE IF NOT EXISTS `reviews`
+CREATE TABLE IF NOT EXISTS reviews
 (
-    `id`            bigint NOT NULL AUTO_INCREMENT,
-    `cleaning_rate` bigint NOT NULL,
-    `employee_rate` bigint NOT NULL,
-    `details`       varchar(700) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    id            BIGSERIAL PRIMARY KEY,
+    cleaning_rate BIGINT NOT NULL,
+    employee_rate BIGINT NOT NULL,
+    details       VARCHAR(700) DEFAULT NULL
+);
 
-CREATE TABLE IF NOT EXISTS `orders`
+CREATE TABLE IF NOT EXISTS orders
 (
-    `id`            bigint                                                                                      NOT NULL AUTO_INCREMENT,
-    `price`         double                                                                                      NOT NULL,
-    `order_time`    datetime(6)                                                                                 NOT NULL,
-    `creation_time` datetime(6)                                                                                 NOT NULL,
-    `client`        bigint       DEFAULT NULL,
-    `comment`       varchar(500) DEFAULT NULL,
-    `address`       bigint                                                                                      NOT NULL,
-    `review`        bigint       DEFAULT NULL,
-    `status`        enum ('NOT_VERIFIED','VERIFIED','NOT_STARTED','PREPARING','IN_PROGRESS','DONE','CANCELLED') NOT NULL,
-    `duration`      decimal(21, 0)                                                                              NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_g9w287a4g2eo1hy2fkhg81dm` (`review`),
-    KEY `FKg8nkrjl2e7h9vmisqk3wb6mf4` (`client`),
-    CONSTRAINT `FKg8nkrjl2e7h9vmisqk3wb6mf4` FOREIGN KEY (`client`) REFERENCES `users` (`id`),
-    CONSTRAINT `FKm5koajka35938tnksntkrm9mf` FOREIGN KEY (`review`) REFERENCES `reviews` (`id`),
-    CONSTRAINT `FKqqw5cd6q594ac1ifjxbq1cian` FOREIGN KEY (`address`) REFERENCES `addresses` (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    id            BIGSERIAL PRIMARY KEY,
+    price         DOUBLE PRECISION NOT NULL,
+    order_time    TIMESTAMP(6) NOT NULL,
+    creation_time TIMESTAMP(6) NOT NULL,
+    client        BIGINT,
+    comment       VARCHAR(500) DEFAULT NULL,
+    address       BIGINT NOT NULL,
+    review        BIGINT,
+    status        VARCHAR(255) NOT NULL CHECK (status IN ('NOT_VERIFIED', 'VERIFIED', 'NOT_STARTED', 'PREPARING', 'IN_PROGRESS', 'DONE', 'CANCELLED')),
+    duration      NUMERIC(21, 0) NOT NULL,
+    UNIQUE (review),
+    CONSTRAINT FKg8nkrjl2e7h9vmisqk3wb6mf4 FOREIGN KEY (client) REFERENCES users (id),
+    CONSTRAINT FKm5koajka35938tnksntkrm9mf FOREIGN KEY (review) REFERENCES reviews (id),
+    CONSTRAINT FKqqw5cd6q594ac1ifjxbq1cian FOREIGN KEY (address) REFERENCES addresses (id)
+);
 
-CREATE TABLE IF NOT EXISTS `executors`
+CREATE TABLE IF NOT EXISTS executors
 (
-    `order_id` bigint NOT NULL,
-    `user_id`  bigint NOT NULL,
-    PRIMARY KEY (`order_id`, `user_id`),
-    KEY `FKs9vfdbexrmy2c2l4kdyw33mcm` (`user_id`),
-    CONSTRAINT `FK50l4atwr0jkewagj8xeod1kbr` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-    CONSTRAINT `FKs9vfdbexrmy2c2l4kdyw33mcm` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    order_id BIGINT NOT NULL,
+    user_id  BIGINT NOT NULL,
+    PRIMARY KEY (order_id, user_id),
+    CONSTRAINT FK50l4atwr0jkewagj8xeod1kbr FOREIGN KEY (order_id) REFERENCES orders (id),
+    CONSTRAINT FKs9vfdbexrmy2c2l4kdyw33mcm FOREIGN KEY (user_id) REFERENCES users (id)
+);
 
-CREATE TABLE IF NOT EXISTS `order_commercial_proposals_mapping`
+CREATE TABLE IF NOT EXISTS order_commercial_proposals_mapping
 (
-    `commercial_proposal_id` bigint NOT NULL,
-    `order_id`               bigint NOT NULL,
-    `quantity`               int DEFAULT NULL,
-    PRIMARY KEY (`commercial_proposal_id`, `order_id`),
-    KEY `FKmrtujudo0hvqv397xk1n5pk86` (`order_id`),
-    CONSTRAINT `FKj2n80auouo3faxnku0h3nk0vb` FOREIGN KEY (`commercial_proposal_id`) REFERENCES `commercial_proposals` (`id`),
-    CONSTRAINT `FKmrtujudo0hvqv397xk1n5pk86` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    commercial_proposal_id BIGINT NOT NULL,
+    order_id               BIGINT NOT NULL,
+    quantity               INT DEFAULT NULL,
+    PRIMARY KEY (commercial_proposal_id, order_id),
+    CONSTRAINT FKj2n80auouo3faxnku0h3nk0vb FOREIGN KEY (commercial_proposal_id) REFERENCES commercial_proposals (id),
+    CONSTRAINT FKmrtujudo0hvqv397xk1n5pk86 FOREIGN KEY (order_id) REFERENCES orders (id)
+);
 
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)
 VALUES ('Leonid', 'Petrenko', 'Ihorovich', '$2a$10$6DI5oh7MbZX7DSkdHOfdlOc6GXj2gH8Qgyo5VCmuldGnAkEMlo3GO', 'admin', '+380930000000', 'ADMIN');
