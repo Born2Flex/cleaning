@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cleaning-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cleaning-app
+  template:
+    metadata:
+      labels:
+        app: cleaning-app
+    spec:
+      containers:
+        - name: cleaning-app
+          image: born2flex/cleaning:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://cleaning-db-service:5438/cleaning-db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: cleaningadmin
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: bestcleaning
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cleaning-app-service
+spec:
+  selector:
+    app: cleaning-app
+  ports:
+    - protocol: TCP
+      port: 8088
+      targetPort: 8080
+  type: LoadBalancer
