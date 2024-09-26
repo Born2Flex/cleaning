@@ -37,7 +37,7 @@ public class MailService {
             javaMailSender.send(mailMessage);
         } catch (MailException e) {
             log.error("Can`t send email for user: " + order.getEmail()
-                    + ", for order with id: " + order.getOrderId());
+                    + ", for order with id: " + order.getOrderId() + ", with error: " + e);
         }
     }
 
@@ -54,7 +54,7 @@ public class MailService {
             javaMailSender.send(mailMessage);
         } catch (MailException e) {
             log.error("Can`t send email for user: " + order.getEmail()
-                    + ", for order with id: " + order.getOrderId());
+                    + ", for order with id: "  + ", with error: " + e);
         }
     }
 }
