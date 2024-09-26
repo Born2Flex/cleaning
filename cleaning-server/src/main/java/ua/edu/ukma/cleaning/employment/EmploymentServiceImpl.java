@@ -2,7 +2,6 @@ package ua.edu.ukma.cleaning.employment;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.order.OrderRepository;
@@ -25,7 +24,6 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final OrderRepository orderRepository;
-    private final ApplicationEventPublisher applicationPublisher;
 
     @Override
     public EmploymentDto create(String motivationList) {
@@ -45,7 +43,6 @@ public class EmploymentServiceImpl implements EmploymentService {
         UserEntity user = findUserOrThrow(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
         repository.delete(employmentRequest);
-        applicationPublisher.publishEvent(new EmployeeHireEvent(userMapper.toDto(user)));
         log.debug("Admin id = {} accepted Employment request id = {}",
                 SecurityContextAccessor.getAuthenticatedUserId(), employmentRequest.getId());
         return true;
@@ -78,7 +75,6 @@ public class EmploymentServiceImpl implements EmploymentService {
                     + ", can`t unemploy user with id: " + employee.getId());
             throw new CantChangeEntityException("Can`t unemploy this user");
         }
-        applicationPublisher.publishEvent(new EmployeeFireEvent(userMapper.toDto(employee)));
         return true;
     }
 

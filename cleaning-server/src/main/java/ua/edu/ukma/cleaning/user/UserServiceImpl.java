@@ -3,7 +3,6 @@ package ua.edu.ukma.cleaning.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.modulith.events.ApplicationModuleListener;
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public UserDto create(UserRegistrationDto user) {
@@ -80,7 +78,6 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = SecurityContextAccessor.getAuthenticatedUser();
         userEntity.setPassword(encoder.encode(user.getPassword()));
         log.info("Password of user id = {} was changed", user.getId());
-        eventPublisher.publishEvent(new UserPasswordChangedEvent(userEntity.getEmail()));
         return userMapper.toDto(userRepository.save(userEntity));
     }
 

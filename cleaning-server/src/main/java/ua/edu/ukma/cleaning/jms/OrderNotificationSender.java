@@ -30,4 +30,9 @@ public class OrderNotificationSender {
             log.error("Recieved Exception during send Message: ", e);
         }
     }
+
+    @PostConstruct
+    void aaa() {
+        sendMessage(new OrderNotification(OrderNotificationType.CREATION, "ssemitskiy@gmail.com", 1L, LocalDateTime.now()));
+    }
 }
