@@ -84,6 +84,12 @@ INSERT INTO users (name, surname, patronymic, password, email, phone_number, rol
 VALUES ('Leonid', 'Petrenko', 'Ihorovich', '$2a$10$6DI5oh7MbZX7DSkdHOfdlOc6GXj2gH8Qgyo5VCmuldGnAkEMlo3GO', 'admin', '+380930000000', 'ADMIN');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
 VALUES ('Maizie', 'Burnett', 'Viktorovivna', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'm.burnatt@gmail.com', '+380931234567','USER');
+INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
+VALUES ('Danylo', 'Shlapak', 'Vitaliyovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'd64566994@gmail.com', '+380931234567','USER');
+INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
+VALUES ('Myhailo', 'Shevchenko', 'Grygorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'muhailo11111@gmail.com', '+380931234567','USER');
+INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
+VALUES ('Oleksandr', 'Semytsky', 'Igorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'ssemitskiy@gmail.com', '+380931234567','USER');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: P4ssw()rd
 VALUES ('Chaya', 'Burnett', 'Petrivna', '$2a$10$3ezDfbsXuVb817/MgR9D5e2ERNHZDckq/0kqx1SwWHnYTdnSmZz7y', 'c.burnett@outlook.com', '+380685812781', 'EMPLOYEE');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: password

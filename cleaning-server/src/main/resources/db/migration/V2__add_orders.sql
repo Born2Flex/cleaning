@@ -28,17 +28,17 @@ VALUES (3, 2, 1, 'Все було жахливо. Хамське выдноше�
 
 -- orders
 
-INSERT INTO orders (id, duration, price, address, client, creation_time, order_time, review, status)
-VALUES (1, 3650000000000, 1100, 5, 2, '2023-8-22 18:00', '2023-9-1 12:00', 2, 'DONE');
+INSERT INTO orders (duration, price, address, client, creation_time, order_time, review, status)
+VALUES (3650000000000, 1100, 5, 2, '2023-8-22 18:00', '2023-9-1 12:00', 2, 'DONE');
 
-INSERT INTO orders (id, duration, price, address, client, creation_time, order_time, review, comment, status)
-VALUES (2, 3100000000000, 1000, 3, 2, '2023-9-22 18:00', '2023-9-27 12:00', 3, 'Нікого не буде вдома під час прибирання', 'DONE');
+INSERT INTO orders (duration, price, address, client, creation_time, order_time, review, comment, status)
+VALUES (3100000000000, 1000, 3, 2, '2023-9-22 18:00', '2023-9-27 12:00', 3, 'Нікого не буде вдома під час прибирання', 'DONE');
 
-INSERT INTO orders (id, duration, price, address, client, creation_time, order_time, review, comment, status)
-VALUES (3, 3600000000000, 1900, 4, 3, '2023-10-22 18:00', '2023-10-27 12:00', 1, '-', 'DONE');
+INSERT INTO orders (duration, price, address, client, creation_time, order_time, review, comment, status)
+VALUES (3600000000000, 1900, 4, 3, '2023-10-22 18:00', '2023-10-27 12:00', 1, '-', 'DONE');
 
-INSERT INTO orders (id, duration, price, address, client, creation_time, order_time, comment, status)
-VALUES (4, 3600000000000, 1900, 4, 4, NOW(), '2024-1-1 15:00', 'Не чистити подушки', 'NOT_VERIFIED');
+INSERT INTO orders (duration, price, address, client, creation_time, order_time, comment, status)
+VALUES (3600000000000, 1900, 4, 4, NOW(), '2024-1-1 15:00', 'Не чистити подушки', 'NOT_VERIFIED');
 
 -- order proposal
 
