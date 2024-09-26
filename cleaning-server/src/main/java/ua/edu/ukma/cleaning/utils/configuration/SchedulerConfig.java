@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import ua.edu.ukma.cleaning.notification.NotificationService;
+import ua.edu.ukma.cleaning.jms.OrderNotification;
+import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
+import ua.edu.ukma.cleaning.jms.OrderNotificationType;
 import ua.edu.ukma.cleaning.order.OrderEntity;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
@@ -20,7 +22,7 @@ public class SchedulerConfig {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private NotificationService notificationService;
+    private OrderNotificationSender notificationSender;
 
     @Scheduled(cron = "0 0 8 * * *")
     public void setOrdersStatusPreparing() {
@@ -31,13 +33,8 @@ public class SchedulerConfig {
                         .filter(order -> order.getStatus() != Status.NOT_VERIFIED)
                         .toList();
         orders.forEach(order -> order.setStatus(Status.PREPARING));
-//        orders.forEach(order -> mailService.sendOrderNotificationForUser(order)); TODO: Use noty server
+        orders.forEach(order -> notificationSender.sendMessage(new OrderNotification(OrderNotificationType.REMINDING, order.getClient().getEmail(), order.getId(), order.getOrderTime())));
         orderRepository.saveAll(orders);
-        log.info("Orders status set, and mails sent");
-    }
-
-    @Scheduled(fixedDelay = 1000 * 60 * 10)
-    public void sendNotificationsForUser() {
-        notificationService.sendNotifications();
+        log.info("Orders status set, and notification sent");
     }
 }

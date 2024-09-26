@@ -6,7 +6,8 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.ukma.notificationserver.OrderNotification;
+import org.ukma.notificationserver.models.OrderNotification;
+import org.ukma.notificationserver.models.OrderNotificationType;
 
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +16,13 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class MailService {
     private final JavaMailSender javaMailSender;
+
+    public void processOrderNotification(OrderNotification order) {
+        if (order.getType() == OrderNotificationType.CREATION)
+            sendOrderCreationMail(order);
+        else
+            sendOrderNotificationForUser(order);
+    }
 
     public void sendOrderCreationMail(OrderNotification order) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

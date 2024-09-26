@@ -2,11 +2,13 @@ package ua.edu.ukma.cleaning.order;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
+import ua.edu.ukma.cleaning.jms.OrderNotification;
+import ua.edu.ukma.cleaning.jms.OrderNotificationType;
 import ua.edu.ukma.cleaning.user.address.AddressMapper;
 import ua.edu.ukma.cleaning.user.address.AddressRepository;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
@@ -34,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
     private final ReviewMapper reviewMapper;
-    private final ApplicationEventPublisher eventPublisher;
+    private final OrderNotificationSender notificationSender;
 
     @Override
     @Transactional
@@ -52,8 +54,8 @@ public class OrderServiceImpl implements OrderService {
         entity.setAddress(addressRepository.findById(order.getAddress().getId())
                 .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
+        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, entity.getClient().getEmail(), entity.getId(), entity.getOrderTime()));
         log.info("Order with id = {} successfully created", entity.getId());
-        eventPublisher.publishEvent(new OrderCreationEvent("Order with id: " + orderDto.getId() + "created successfully"));
         return orderDto;
     }
 

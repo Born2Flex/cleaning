@@ -1,13 +1,16 @@
+package ua.edu.ukma.cleaning.jms;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderNotification {
+public class OrderNotification implements Serializable {
     private OrderNotificationType type;
     private String email;
     private Long orderId;
