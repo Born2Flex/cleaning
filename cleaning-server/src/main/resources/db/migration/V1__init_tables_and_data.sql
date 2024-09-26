@@ -85,11 +85,11 @@ VALUES ('Leonid', 'Petrenko', 'Ihorovich', '$2a$10$6DI5oh7MbZX7DSkdHOfdlOc6GXj2g
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
 VALUES ('Maizie', 'Burnett', 'Viktorovivna', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'm.burnatt@gmail.com', '+380931234567','USER');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Danylo', 'Shlapak', 'Vitaliyovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'd64566994@gmail.com', '+380931234567','USER');
+VALUES ('Danylo', 'Shlapak', 'Vitaliyovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'd64566994@gmail.com', '+380931234561','USER');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Myhailo', 'Shevchenko', 'Grygorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'muhailo11111@gmail.com', '+380931234567','USER');
+VALUES ('Myhailo', 'Shevchenko', 'Grygorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'muhailo11111@gmail.com', '+380931234562','USER');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Oleksandr', 'Semytsky', 'Igorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'ssemitskiy@gmail.com', '+380931234567','USER');
+VALUES ('Oleksandr', 'Semytsky', 'Igorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'ssemitskiy@gmail.com', '+380945234563','USER');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: P4ssw()rd
 VALUES ('Chaya', 'Burnett', 'Petrivna', '$2a$10$3ezDfbsXuVb817/MgR9D5e2ERNHZDckq/0kqx1SwWHnYTdnSmZz7y', 'c.burnett@outlook.com', '+380685812781', 'EMPLOYEE');
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: password
@@ -101,19 +101,19 @@ VALUES ('Kallum', 'Charles', 'Ivanovna', '$2a$10$mLur1uQN0ZRORjvPMAo.OeBOYsTbz4h
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: password
 VALUES ('Alys', 'Bonner', 'Semenivna', '$2a$10$khRH0cGfqeo6S8uux6o.suCG32m1qxxj60mP3m7eIK3ibWjkB4nXW', 'a.bonner@gmail.com', '+380679831471', 'EMPLOYEE');
 
-INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 15m/900s (+000000000)
-VALUES (1, 'Подушка велика', 'Велика подушка з легкоочищуваного матеріалу', 'Подушка 70х70 з екопуху/пуху/бамбуку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні подушки не підпадають у цю категорію.', 1, 900000000000, 220, 'PER_ITEM');
+INSERT INTO commercial_proposals (name, short_description, full_description, count_of_employee, duration, price, type) -- 15m/900s (+000000000)
+VALUES ('Подушка велика', 'Велика подушка з легкоочищуваного матеріалу', 'Подушка 70х70 з екопуху/пуху/бамбуку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні подушки не підпадають у цю категорію.', 1, 900000000000, 220, 'PER_ITEM');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 30m/1800s
-VALUES (2, 'Подушка велика+', 'Білосніжні або шовкові подушки', 'Подушка 70х70 з шовку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні подушки підпадають у цю категорію.', 1, 1800000000000, 570, 'PER_ITEM');
+VALUES ('Подушка велика+', 'Білосніжні або шовкові подушки', 'Подушка 70х70 з шовку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні подушки підпадають у цю категорію.', 1, 1800000000000, 570, 'PER_ITEM');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 1h/3600s
-VALUES (3, 'Диван середній', 'Диван 200х100х70', 'Диван 200х100х70 з легкоочищуваного матеріалу, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні дивани не підпадають у цю категорію.', 2, 3600000000000, 1100, 'PER_ITEM');
+VALUES ('Диван середній', 'Диван 200х100х70', 'Диван 200х100х70 з легкоочищуваного матеріалу, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні дивани не підпадають у цю категорію.', 2, 3600000000000, 1100, 'PER_ITEM');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 1h/3600s
-VALUES (4, 'Диван середній+', 'Диван 200х100х70 з складних матеріалів', 'Диван 200х100х70 з шовку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні дивани підпадають у цю категорію.', 2, 3600000000000, 1500, 'PER_ITEM');
+VALUES ('Диван середній+', 'Диван 200х100х70 з складних матеріалів', 'Диван 200х100х70 з шовку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні дивани підпадають у цю категорію.', 2, 3600000000000, 1500, 'PER_ITEM');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 3h/10800s
-VALUES (5, 'Офіс (плитка)', 'Вологе прибирання офісу', 'Офіс з кам\`яною підлогою або плиткою, без складних забруднень, до 3 санвузлів, прибирання коли офіс пустий.', 4, 10800000000000, 200, 'PER_AREA');
+VALUES ('Офіс (плитка)', 'Вологе прибирання офісу', 'Офіс з кам\`яною підлогою або плиткою, без складних забруднень, до 3 санвузлів, прибирання коли офіс пустий.', 4, 10800000000000, 200, 'PER_AREA');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 3h/10800s
-VALUES (6, 'Офіс (паркет)', 'Вологе прибирання офісу', 'Офіс з паркетом, без складних забруднень, до 2 санвузлів, прибирання коли офіс пустий.', 6, 10800000000000, 250, 'PER_AREA');
+VALUES ('Офіс (паркет)', 'Вологе прибирання офісу', 'Офіс з паркетом, без складних забруднень, до 2 санвузлів, прибирання коли офіс пустий.', 6, 10800000000000, 250, 'PER_AREA');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 3h/10800s
-VALUES (7, 'Ремонт', 'Вологе прибирання після ремонту', 'Прибирання після ремонту – фінальна точка перед приїздом на місце нову квартиру. Навіть якщо ви проводили косметичний ремонт, на меблях, техніці, підлозі та інших поверхнях міг залишитися будівельний пил, від якого складно позбутися самостійно.', 3, 10800000000000, 110, 'PER_AREA');
+VALUES ('Ремонт', 'Вологе прибирання після ремонту', 'Прибирання після ремонту – фінальна точка перед приїздом на місце нову квартиру. Навіть якщо ви проводили косметичний ремонт, на меблях, техніці, підлозі та інших поверхнях міг залишитися будівельний пил, від якого складно позбутися самостійно.', 3, 10800000000000, 110, 'PER_AREA');
 INSERT INTO commercial_proposals (id, name, short_description, full_description, count_of_employee, duration, price, type) -- 30m/1800s
-VALUES (8, 'Вікна', 'Миття вікон', 'Миття вікон, віконних рам, віконних жалюзі, віконних решіток, віконних москітних сіток, підвіконь', 1, 1800000000000, 170, 'PER_AREA');
+VALUES ('Вікна', 'Миття вікон', 'Миття вікон, віконних рам, віконних жалюзі, віконних решіток, віконних москітних сіток, підвіконь', 1, 1800000000000, 170, 'PER_AREA');

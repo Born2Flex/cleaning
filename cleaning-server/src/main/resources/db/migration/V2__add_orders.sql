@@ -1,30 +1,30 @@
 -- addresses
 
 INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
-VALUES (1, 'Київ', 'Хрещатик', '1Д', '1', '01001', 2);
+VALUES ('Київ', 'Хрещатик', '1Д', '1', '01001', 2);
 
 INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
-VALUES (2, 'Київ', 'Гончаренка', '10Г', '12', '02345', 2);
+VALUES ('Київ', 'Гончаренка', '10Г', '12', '02345', 2);
 
 INSERT INTO addresses (id, city, street, house_number, zip, user_id)
-VALUES (3, 'Львів', 'Петлюри', '10', '01231', null);
+VALUES ('Львів', 'Петлюри', '10', '01231', null);
 
 INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
-VALUES (4, 'Київ', 'Лумумби', '10', '40К', '01671', null);
+VALUES ('Київ', 'Лумумби', '10', '40К', '01671', null);
 
 INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
-VALUES (5, 'Дніпро', 'Тичини', '10В', '15К', '01501', 3);
+VALUES ('Дніпро', 'Тичини', '10В', '15К', '01501', 3);
 
 -- reviews
 
-INSERT INTO reviews (id, cleaning_rate, employee_rate, details)
-VALUES (1, 5, 5, 'Все було ідеально');
+INSERT INTO reviews (cleaning_rate, employee_rate, details)
+VALUES (5, 5, 'Все було ідеально');
 
-INSERT INTO reviews (id, cleaning_rate, employee_rate, details)
-VALUES (2, 4, 5, 'Все було добре');
+INSERT INTO reviews (cleaning_rate, employee_rate, details)
+VALUES (4, 5, 'Все було добре');
 
-INSERT INTO reviews (id, cleaning_rate, employee_rate, details)
-VALUES (3, 2, 1, 'Все було жахливо. Хамське выдношення та погана якість прибирання');
+INSERT INTO reviews (cleaning_rate, employee_rate, details)
+VALUES (2, 1, 'Все було жахливо. Хамське выдношення та погана якість прибирання');
 
 -- orders
 
