@@ -35,4 +35,9 @@ public class OrderNotificationSender {
     void aaa() {
         sendMessage(new OrderNotification(OrderNotificationType.CREATION, "ssemitskiy@gmail.com", 1L, LocalDateTime.now()));
     }
+
+    @PostConstruct
+    void test() {
+        sendMessage(new OrderNotification(OrderNotificationType.CREATION, "ssemitskiy@gmail.com", 1L, LocalDateTime.now()));
+    }
 }

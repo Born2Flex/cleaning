@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cleaning-mq-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: cleaning-mq
+    spec:
+      containers:
+        - name: cleaning-mq-container
+          image: apache/activemq-classic:5.18.3
+          env:
+            - name: ACTIVEMQ_ADMIN_LOGIN
+              value: admin
+            - name: ACTIVEMQ_ADMIN_PASSWORD
+              value: admin
+          ports:
+            - containerPort: 61616
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cleaning-mq
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cleaning-mq-service
+spec:
+  ports:
+    - port: 61616
+      targetPort: 61616
+  selector:
+    app: cleaning-mq

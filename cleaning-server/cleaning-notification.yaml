@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cleaning-notification-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: cleaning-notification
+    spec:
+      containers:
+        - name: cleaning-notification-container
+          image: born2flex/cleaning-notification:latest
+          env:
+            - name: ACTIVEMQ_ADMIN_URL
+              value: tcp://cleaning-mq-service:61616
+            - name: ACTIVEMQ_ADMIN_LOGIN
+              value: admin
+            - name: ACTIVEMQ_ADMIN_PASSWORD
+              value: admin
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cleaning-notification

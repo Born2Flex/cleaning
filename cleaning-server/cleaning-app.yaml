@@ -1,21 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cleaning-app
+  name: cleaning-app-deployment
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cleaning-app
   template:
     metadata:
       labels:
         app: cleaning-app
     spec:
       containers:
-        - name: cleaning-app
+        - name: cleaning-app-container
           image: born2flex/cleaning:latest
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
@@ -25,6 +20,12 @@ spec:
               value: cleaningadmin
             - name: SPRING_DATASOURCE_PASSWORD
               value: bestcleaning
+            - name: ACTIVEMQ_ADMIN_URL
+              value: tcp://cleaning-mq-service:61616
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cleaning-app
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +35,7 @@ spec:
   selector:
     app: cleaning-app
   ports:
-    - protocol: TCP
-      port: 8088
+    - port: 8088
       targetPort: 8080
-  type: LoadBalancer
+      nodePort: 30003
+  type: NodePort

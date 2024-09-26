@@ -8,9 +8,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://cleaning-db:5432/cleaning
-      - SPRING_DATASOURCE_USERNAME=cleaningadmin
-      - SPRING_DATASOURCE_PASSWORD=bestcleaning
+      SPRING_DATASOURCE_URL: jdbc:postgresql://cleaning-db:5432/cleaning
+      SPRING_DATASOURCE_USERNAME: cleaningadmin
+      SPRING_DATASOURCE_PASSWORD: bestcleaning
+    depends_on:
+      - cleaning_db
 
   cleaning_db:
     image: "postgres:latest"
