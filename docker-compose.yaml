@@ -24,5 +24,18 @@ services:
     volumes:
       - cleaning-data:/var/lib/postgres/data
 
+  cleaning_activeMq:
+    image: "apache/activemq-classic:5.18.3"
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+    volumes:
+      - cleaning-data:/var/activemq/data
+      - cleaning-conf:/var/activemq/conf
+
 volumes:
   cleaning-data:
+  cleaning-conf:
