@@ -1,18 +1,18 @@
 -- addresses
 
-INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
+INSERT INTO addresses (city, street, house_number, flat_number, zip, user_id)
 VALUES ('Київ', 'Хрещатик', '1Д', '1', '01001', 2);
 
-INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
+INSERT INTO addresses (city, street, house_number, flat_number, zip, user_id)
 VALUES ('Київ', 'Гончаренка', '10Г', '12', '02345', 2);
 
-INSERT INTO addresses (id, city, street, house_number, zip, user_id)
+INSERT INTO addresses (city, street, house_number, zip, user_id)
 VALUES ('Львів', 'Петлюри', '10', '01231', null);
 
-INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
+INSERT INTO addresses (city, street, house_number, flat_number, zip, user_id)
 VALUES ('Київ', 'Лумумби', '10', '40К', '01671', null);
 
-INSERT INTO addresses (id, city, street, house_number, flat_number, zip, user_id)
+INSERT INTO addresses (city, street, house_number, flat_number, zip, user_id)
 VALUES ('Дніпро', 'Тичини', '10В', '15К', '01501', 3);
 
 -- reviews
