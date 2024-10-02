@@ -1,9 +1,12 @@
 package ua.edu.ukma.cleaning.employment;
 
+import org.springframework.web.multipart.MultipartFile;
+import ua.edu.ukma.cleaning.storage.ResourceWithType;
+
 import java.util.List;
 
 public interface EmploymentService {
-    EmploymentDto create(String motivationList);
+    EmploymentDto create(String motivationList, MultipartFile resumeFile);
 
     Boolean succeed(Long userId);
 
@@ -12,4 +15,6 @@ public interface EmploymentService {
     List<EmploymentDto> getAll();
 
     Boolean unemployment(Long userId);
+
+    ResourceWithType loadResume();
 }

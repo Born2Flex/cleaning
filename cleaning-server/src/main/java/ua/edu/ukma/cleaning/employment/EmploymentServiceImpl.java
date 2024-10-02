@@ -2,10 +2,16 @@ package ua.edu.ukma.cleaning.employment;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
+import ua.edu.ukma.cleaning.storage.ResourceWithType;
+import ua.edu.ukma.cleaning.storage.StorageService;
 import ua.edu.ukma.cleaning.user.*;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
@@ -24,17 +30,26 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final OrderRepository orderRepository;
+    private final StorageService storageService;
 
     @Override
-    public EmploymentDto create(String motivationList) {
+    public EmploymentDto create(String motivationList, MultipartFile resumeFile) {
         if (repository.findByApplicant_Id(SecurityContextAccessor.getAuthenticatedUserId()).isPresent()) {
             log.info("User id = {} try to send more than 1 application for a job", SecurityContextAccessor.getAuthenticatedUserId());
             throw new AlreadyAppliedException("You have already applied for this position");
         }
         EmploymentEntity employmentRequest = employmentMapper.toEntity(motivationList);
         employmentRequest.setApplicant(SecurityContextAccessor.getAuthenticatedUser());
+        EmploymentDto dto = employmentMapper.toDto(repository.save(employmentRequest));
+        storageService.storeFile(employmentRequest, resumeFile);
         log.info("Created new employment request with id = {}", employmentRequest.getId());
-        return employmentMapper.toDto(repository.save(employmentRequest));
+        return dto;
+    }
+
+    @Override
+    public ResourceWithType loadResume() {
+        Long applicantId = SecurityContextAccessor.getAuthenticatedUserId();
+        return storageService.loadAsResource(repository.findByApplicant_Id(applicantId).orElseThrow());
     }
 
     @Transactional
