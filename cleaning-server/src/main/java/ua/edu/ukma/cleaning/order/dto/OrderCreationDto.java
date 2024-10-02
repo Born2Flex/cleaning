@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.cleaning.user.address.AddressDto;
+import ua.edu.ukma.cleaning.address.AddressDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

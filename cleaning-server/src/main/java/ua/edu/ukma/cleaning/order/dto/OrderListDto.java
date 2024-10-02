@@ -3,7 +3,7 @@ package ua.edu.ukma.cleaning.order.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.cleaning.user.address.AddressDto;
+import ua.edu.ukma.cleaning.address.AddressDto;
 import ua.edu.ukma.cleaning.order.Status;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 

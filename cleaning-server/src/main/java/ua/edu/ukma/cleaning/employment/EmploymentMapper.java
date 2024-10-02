@@ -1,7 +1,6 @@
 package ua.edu.ukma.cleaning.employment;
 
 import org.mapstruct.*;
-import ua.edu.ukma.cleaning.user.UserMapper;
 
 import java.util.List;
 

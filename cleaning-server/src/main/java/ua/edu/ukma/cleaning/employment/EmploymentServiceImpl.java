@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
-import ua.edu.ukma.cleaning.user.*;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.user.security.SecurityContextAccessor;
+import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,8 +20,6 @@ import java.util.List;
 public class EmploymentServiceImpl implements EmploymentService {
     private final EmploymentRepository repository;
     private final EmploymentMapper employmentMapper;
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final OrderRepository orderRepository;
 
     @Override

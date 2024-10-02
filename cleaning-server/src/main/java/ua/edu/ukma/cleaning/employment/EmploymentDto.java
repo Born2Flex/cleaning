@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.cleaning.user.dto.EmployeeDto;
+import ua.edu.ukma.cleaning.user.EmployeeDto;
 
 import java.time.LocalDateTime;
 

@@ -1,13 +1,12 @@
 package ua.edu.ukma.cleaning.order;
 
 import org.mapstruct.*;
-import ua.edu.ukma.cleaning.user.address.AddressMapper;
+import ua.edu.ukma.cleaning.address.AddressMapper;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.dto.OrderCreationDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForAdminDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForUserDto;
 import ua.edu.ukma.cleaning.order.dto.OrderListDto;
-import ua.edu.ukma.cleaning.user.UserMapper;
 
 import java.util.HashMap;
 import java.util.List;

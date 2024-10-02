@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ua.edu.ukma.cleaning.user.UserEntity;
 
 import java.time.LocalDateTime;
 

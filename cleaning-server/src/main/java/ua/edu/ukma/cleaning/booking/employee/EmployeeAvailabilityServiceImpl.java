@@ -7,11 +7,7 @@ import org.springframework.stereotype.Service;
 import ua.edu.ukma.cleaning.order.OrderEntity;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
-import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.user.UserEntity;
-import ua.edu.ukma.cleaning.user.UserMapper;
-import ua.edu.ukma.cleaning.user.UserRepository;
-import ua.edu.ukma.cleaning.user.dto.EmployeeDto;
+import ua.edu.ukma.cleaning.user.EmployeeDto;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

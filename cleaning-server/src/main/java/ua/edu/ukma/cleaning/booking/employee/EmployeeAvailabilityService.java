@@ -1,7 +1,7 @@
 package ua.edu.ukma.cleaning.booking.employee;
 
 
-import ua.edu.ukma.cleaning.user.dto.EmployeeDto;
+import ua.edu.ukma.cleaning.user.EmployeeDto;
 
 import java.util.List;
 

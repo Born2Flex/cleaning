@@ -7,9 +7,6 @@ import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.OrderEntity;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
-import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.user.UserEntity;
-import ua.edu.ukma.cleaning.user.UserRepository;
 
 import java.time.Duration;
 import java.time.LocalDate;

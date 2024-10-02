@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import ua.edu.ukma.cleaning.user.address.AddressEntity;
+import ua.edu.ukma.cleaning.address.AddressEntity;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.review.ReviewEntity;
-import ua.edu.ukma.cleaning.user.UserEntity;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

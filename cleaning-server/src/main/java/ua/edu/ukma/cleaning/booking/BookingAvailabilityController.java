@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.ukma.cleaning.booking.employee.EmployeeAvailabilityService;
-import ua.edu.ukma.cleaning.user.dto.EmployeeDto;
+import ua.edu.ukma.cleaning.user.EmployeeDto;
 
 import java.time.Duration;
 import java.time.LocalDate;
