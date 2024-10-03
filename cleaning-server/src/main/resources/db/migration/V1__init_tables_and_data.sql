@@ -17,9 +17,7 @@ CREATE TABLE IF NOT EXISTS addresses
     street       VARCHAR(255) NOT NULL,
     house_number VARCHAR(255) NOT NULL,
     flat_number  VARCHAR(255) DEFAULT NULL,
-    zip          VARCHAR(255) DEFAULT NULL,
-    user_id      BIGINT,
-    CONSTRAINT FKda8tuywtf0gb6sedwk7la1pgi FOREIGN KEY (user_id) REFERENCES users (id)
+    zip          VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS commercial_proposals

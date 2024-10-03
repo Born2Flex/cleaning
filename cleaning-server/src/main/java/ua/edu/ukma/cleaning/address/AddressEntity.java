@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
@@ -34,12 +33,4 @@ public class AddressEntity {
 
     @Column(name = "zip")
     private String zip;
-
-    @ToStringExclude
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private UserEntity user;
-
-    @Column(name = "user_id", insertable=false, updatable=false)
-    private Long userId;
 }

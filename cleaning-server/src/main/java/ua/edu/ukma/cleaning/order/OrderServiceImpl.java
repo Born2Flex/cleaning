@@ -46,10 +46,6 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toMap(
                         x -> commercialProposalRepository.findById(x.getKey()).get(),
                         Map.Entry::getValue)));
-        if (order.getAddress().getId() == null) {
-            order.getAddress().setId(0l);
-            log.debug("Creating new address for order id = {}", entity.getId());
-        }
         entity.setAddress(addressRepository.findById(order.getAddress().getId())
                 .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));

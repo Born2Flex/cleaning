@@ -12,7 +12,6 @@ import ua.edu.ukma.cleaning.order.review.ReviewEntity;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
