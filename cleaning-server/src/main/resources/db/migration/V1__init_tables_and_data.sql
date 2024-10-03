@@ -1,25 +1,3 @@
-CREATE TABLE IF NOT EXISTS users
-(
-    id           BIGSERIAL PRIMARY KEY,
-    name         VARCHAR(255) DEFAULT NULL,
-    surname      VARCHAR(255) DEFAULT NULL,
-    patronymic   VARCHAR(255) DEFAULT NULL,
-    email        VARCHAR(255) NOT NULL UNIQUE,
-    password     VARCHAR(255) NOT NULL,
-    role         VARCHAR(255) NOT NULL CHECK (role IN ('USER', 'EMPLOYEE', 'ADMIN')),
-    phone_number VARCHAR(255) DEFAULT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS addresses
-(
-    id           BIGSERIAL PRIMARY KEY,
-    city         VARCHAR(255) NOT NULL,
-    street       VARCHAR(255) NOT NULL,
-    house_number VARCHAR(255) NOT NULL,
-    flat_number  VARCHAR(255) DEFAULT NULL,
-    zip          VARCHAR(255) DEFAULT NULL
-);
-
 CREATE TABLE IF NOT EXISTS commercial_proposals
 (
     id                BIGSERIAL PRIMARY KEY,
