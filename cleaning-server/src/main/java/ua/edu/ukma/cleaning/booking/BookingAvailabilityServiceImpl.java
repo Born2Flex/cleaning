@@ -7,6 +7,9 @@ import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.OrderEntity;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
+import ua.edu.ukma.cleaning.user.Role;
+import ua.edu.ukma.cleaning.user.UserServerClient;
+import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -23,13 +26,13 @@ import java.util.stream.LongStream;
 @RequiredArgsConstructor
 public class BookingAvailabilityServiceImpl implements BookingAvailabilityService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final UserServerClient userServerClient;
 
     @Override
     public Map<LocalDate, List<LocalTime>> getAvailableTime(Long countOfExecutors, Duration duration) {
         LocalDate dateOfStart = LocalDate.now().plusDays(1);
         LocalTime timeOfStart = LocalTime.of(9, 0);
-        List<UserEntity> employees = userRepository.findAllByRole(Role.EMPLOYEE);
+        List<UserListDto> employees = userServerClient.getAllByRole(Role.EMPLOYEE);
         Map<LocalDate, List<LocalTime>> allTimeMap = LongStream.range(0, 7)
                 .boxed()
                 .collect(Collectors.toMap(

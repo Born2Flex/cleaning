@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import ua.edu.ukma.cleaning.address.AddressEntity;
+import ua.edu.ukma.cleaning.address.AddressDto;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.review.ReviewEntity;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -35,25 +36,19 @@ public class OrderEntity {
     @Column(name = "creation_time", nullable = false)
     private LocalDateTime creationTime;
 
-    @ManyToOne
-    @JoinColumn(name = "client", nullable = false)
-    private UserEntity client;
+    @Column(name = "client_email")
+    private String clientEmail;
 
-    @Column(name = "client", insertable=false, updatable=false)
-    private Long clientId;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "executors",
-            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<UserEntity> executors;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "order_executor", joinColumns = @JoinColumn(name = "order_id"))
+    @Column(name = "executors")
+    private Set<Long> executors;
 
     @Column(name = "comment", length = 500)
     private String comment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", nullable = false)
-    private AddressEntity address;
+    @Convert(converter = AddressConverter.class)
+    private AddressDto address;
 
     @OneToOne()
     @Cascade(org.hibernate.annotations.CascadeType.ALL)

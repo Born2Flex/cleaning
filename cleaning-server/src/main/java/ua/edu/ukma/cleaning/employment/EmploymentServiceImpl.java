@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
+import ua.edu.ukma.cleaning.user.UserServerClient;
+import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
@@ -22,22 +24,26 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final EmploymentMapper employmentMapper;
     private final OrderRepository orderRepository;
 
+    private final UserServerClient userServerClient;
+
     @Override
     public EmploymentDto create(String motivationList) {
-        if (repository.findByApplicant_Id(SecurityContextAccessor.getAuthenticatedUserId()).isPresent()) {
+        if (repository.findByApplicantId(SecurityContextAccessor.getAuthenticatedUserId()).isPresent()) {
             log.info("User id = {} try to send more than 1 application for a job", SecurityContextAccessor.getAuthenticatedUserId());
             throw new AlreadyAppliedException("You have already applied for this position");
         }
         EmploymentEntity employmentRequest = employmentMapper.toEntity(motivationList);
-        employmentRequest.setApplicant(SecurityContextAccessor.getAuthenticatedUser());
+        employmentRequest.setApplicantId(SecurityContextAccessor.getAuthenticatedUser().getId());
         log.info("Created new employment request with id = {}", employmentRequest.getId());
-        return employmentMapper.toDto(repository.save(employmentRequest));
+        EmploymentDto employeeDto = employmentMapper.toDto(repository.save(employmentRequest));
+        employeeDto.setApplicant(userServerClient.getById(SecurityContextAccessor.getAuthenticatedUserId()));
+        return employeeDto;
     }
 
     @Transactional
     @Override
     public Boolean succeed(Long userId) {
-        UserEntity user = findUserOrThrow(userId);
+        UserDto user = userServerClient.getById(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
         repository.delete(employmentRequest);
         log.debug("Admin id = {} accepted Employment request id = {}",
@@ -62,7 +68,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     @Transactional
     @Override
     public Boolean unemployment(Long userId) {
-        UserEntity employee = findUserOrThrow(userId);
+        UserDto employee = userServerClient.getById(userId);
         long countOfUnfinishedOrders = orderRepository.findOrdersByExecutorsId(employee.getId()).stream()
                 .filter(order -> order.getStatus() != Status.CANCELLED && order.getStatus() != Status.DONE)
                 .filter(order -> order.getOrderTime().isAfter(LocalDateTime.now()))
@@ -75,15 +81,8 @@ public class EmploymentServiceImpl implements EmploymentService {
         return true;
     }
 
-    private UserEntity findUserOrThrow(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> {
-            log.info("Can`t find user by id = {}", userId);
-            return new NoSuchEntityException("Can`t find user by id: " + userId);
-        });
-    }
-
     private EmploymentEntity findEmploymentOrThrow(Long userId) {
-        return repository.findByApplicant_Id(userId).orElseThrow(() -> {
+        return repository.findByApplicantId(userId).orElseThrow(() -> {
             log.info("Can`t find application by user id = {}", userId);
             return new NoSuchEntityException("Can`t find application by user id: " + userId);
         });

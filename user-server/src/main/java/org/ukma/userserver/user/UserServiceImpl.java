@@ -16,6 +16,9 @@ import org.ukma.userserver.user.models.UserPageDto;
 import org.ukma.userserver.user.models.UserPasswordDto;
 import org.ukma.userserver.user.models.UserRegistrationDto;
 import org.ukma.userserver.utils.SecurityContextAccessor;
+import org.ukma.userserver.user.models.*;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -70,5 +73,10 @@ public class UserServiceImpl implements UserService {
         Page<UserEntity> users = userRepository.findAllByRole(role, pageable);
         int totalPages = users.getTotalPages();
         return new UserPageDto(pageable.getPageNumber(), totalPages, userMapper.toUserListDto(users.stream().toList()));
+    }
+
+    @Override
+    public List<UserListDto> findUsersByRole(Role role) {
+        return userMapper.toUserListDto(userRepository.findAllByRole(role));
     }
 }

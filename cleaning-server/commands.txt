@@ -1,0 +1,5 @@
+kubectl delete -n default deployment cleaning-db-deployment
+kubectl delete -n default service cleaning-db-service
+kubectl get deployments
+
+kubectl create -f cleaning-app.yaml

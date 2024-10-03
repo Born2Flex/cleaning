@@ -1,7 +1,5 @@
-package ua.edu.ukma.cleaning.utils.exceptionHandler;
+package org.ukma.userserver.exceptions;
 
-
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +25,7 @@ public class GlobalHandler {
         return new ResponseEntity<>(formatMessage(message), getHttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ProposalNameDuplicateException.class, CantChangeEntityException.class, AlreadyAppliedException.class})
+    @ExceptionHandler({EmailDuplicateException.class, PhoneNumberDuplicateException.class})
     public ResponseEntity<String> handleDuplicateException(Exception e) {
         return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.CONFLICT);
     }

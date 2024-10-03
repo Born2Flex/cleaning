@@ -1,5 +1,7 @@
 package ua.edu.ukma.cleaning.user;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,13 +10,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
+import ua.edu.ukma.cleaning.security.JwtService;
+import ua.edu.ukma.cleaning.user.dto.UserDto;
+import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class UserServerClient {
+    public static final String BEARER_PREFIX = "Bearer ";
     @Value("${user.server.url}")
     private String userServerUrl;
 
@@ -26,40 +36,46 @@ public class UserServerClient {
 
     private String authToken;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestClient restClient = RestClient.create(userServerUrl);
 
-    public ResponseEntity<String> makeApiRequest(String endpoint, HttpMethod method, Map<String, Object> requestBody) {
-        if (authToken == null || isTokenExpired()) {
+    private final JwtService jwtService;
+
+    public UserDto getById(Long id) {
+        return makeApiRequest("/api/users", HttpMethod.GET, null, UserDto.class).getBody();
+    }
+
+    public void updateUser(UserDto userDto) {
+        makeApiRequest("/api/users", HttpMethod.PUT, userDto, Object.class);
+    }
+
+    public List<UserListDto> getAllByRole(Role role) {
+        return ((List<UserListDto>) makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, null, List.class).getBody());
+    }
+
+    public <T> ResponseEntity<T> makeApiRequest(String endpoint, HttpMethod method, Object requestBody, Class<T> responseType) {
+        if (authToken == null || jwtService.isTokenExpired(authToken)) {
             login();
         }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-
         try {
-            return restTemplate.exchange(userServerUrl + endpoint, method, entity, String.class);
-        } catch (HttpClientErrorException.Unauthorized e) {
-            login();
-            headers.setBearerAuth(authToken);
-            entity = new HttpEntity<>(requestBody, headers);
-            return restTemplate.exchange(userServerUrl + endpoint, method, entity, String.class);
+            return restClient.method(method)
+                    .uri(endpoint)
+                    .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + authToken)
+                    .body(requestBody)
+                    .retrieve()
+                    .toEntity(responseType);
+        } catch (Exception e) {
+            log.info("Error making request", e);
+            throw new RuntimeException(e);
         }
     }
 
     private void login() {
-        Map<String, String> loginRequest = new HashMap<>();
-        loginRequest.put("username", username);
-        loginRequest.put("password", password);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(loginRequest, headers);
-        ResponseEntity<JwtResponse> response = restTemplate.exchange(userServerUrl + "/api/login", HttpMethod.POST, entity, JwtResponse.class);
-        authToken = response.getBody().getAccessToken();
-    }
-
-    private boolean isTokenExpired() {
-        return false;
+        AuthRequest authRequest = new AuthRequest(username, password);
+        JwtResponse response = restClient.method(HttpMethod.POST)
+                .uri("/api/auth/login")
+                .body(authRequest)
+                .retrieve()
+                .toEntity(JwtResponse.class).getBody();
+        authToken = response.getAccessToken();
     }
 }

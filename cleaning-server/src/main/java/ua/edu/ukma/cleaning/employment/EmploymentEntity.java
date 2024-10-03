@@ -18,14 +18,10 @@ public class EmploymentEntity {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne()
-    @JoinColumn(name = "applicant", nullable = false)
-    private UserEntity applicant;
+    @Column(name = "applicant_id")
+    private Long applicantId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_time", nullable = false)
     private LocalDateTime creationTime;
-
-    @Column(name = "motivation_list", length = 1000)
-    private String motivationList;
 }

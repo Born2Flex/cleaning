@@ -34,5 +34,5 @@ public class OrderForAdminDto {
     private Map<String, Integer> commercialProposals;
     @NotNull(message = "Order executors can't be null")
     @Size(min = 1, message = "Order should have at least 1 executor")
-    private List<EmployeeDto> executors;
+    private List<Long> executors;
 }

@@ -4,16 +4,16 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface EmploymentMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "applicant", ignore = true),
+            @Mapping(target = "applicantId", ignore = true),
             @Mapping(target = "creationTime", expression = "java(java.time.LocalDateTime.now())"),
-            @Mapping(target = "motivationList", source = "motivationList")
     })
     EmploymentEntity toEntity(String motivationList);
 
+    @Mapping(target = "applicant", ignore = true)
     EmploymentDto toDto(EmploymentEntity entity);
 
     List<EmploymentDto> toDtoList(List<EmploymentEntity> entities);

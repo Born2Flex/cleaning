@@ -2,11 +2,9 @@ package org.ukma.userserver.user;
 
 
 import org.springframework.data.domain.Pageable;
-import org.ukma.userserver.user.models.Role;
-import org.ukma.userserver.user.models.UserDto;
-import org.ukma.userserver.user.models.UserPageDto;
-import org.ukma.userserver.user.models.UserPasswordDto;
-import org.ukma.userserver.user.models.UserRegistrationDto;
+import org.ukma.userserver.user.models.*;
+
+import java.util.List;
 
 public interface UserService {
     UserDto create(UserRegistrationDto user);
@@ -16,4 +14,5 @@ public interface UserService {
     UserDto updatePassword(UserPasswordDto user);
 
     UserPageDto findUsersByPageAndRole(Role role, Pageable pageable);
+    List<UserListDto> findUsersByRole(Role role);
 }

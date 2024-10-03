@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AddressDto {
-    private Long id;
     @NotNull(message = "City can't be null!")
     @NotBlank(message = "City can't be blank!")
     private String city;

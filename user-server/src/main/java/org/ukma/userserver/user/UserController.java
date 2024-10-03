@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.ukma.userserver.user.models.Role;
-import org.ukma.userserver.user.models.UserDto;
-import org.ukma.userserver.user.models.UserPageDto;
-import org.ukma.userserver.user.models.UserPasswordDto;
-import org.ukma.userserver.user.models.UserRegistrationDto;
+import org.ukma.userserver.user.models.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController()
@@ -73,5 +71,12 @@ public class UserController {
     @GetMapping("/findAllByRole")
     public UserPageDto findAllByRole(@RequestParam(defaultValue = "USER") Role role, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return userService.findUsersByPageAndRole(role, pageable);
+    }
+
+    @Operation(summary = "Find all users by Role", description = "Find all users by Role")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/by-role/{role}")
+    public List<UserListDto> findAllByRole(@PathVariable Role role) {
+        return userService.findUsersByRole(role);
     }
 }

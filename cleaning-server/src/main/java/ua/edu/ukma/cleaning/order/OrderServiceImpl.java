@@ -9,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
 import ua.edu.ukma.cleaning.jms.OrderNotification;
 import ua.edu.ukma.cleaning.jms.OrderNotificationType;
-import ua.edu.ukma.cleaning.address.AddressMapper;
-import ua.edu.ukma.cleaning.address.AddressRepository;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 import ua.edu.ukma.cleaning.order.review.ReviewMapper;
+import ua.edu.ukma.cleaning.user.Role;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AccessDeniedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
@@ -32,8 +31,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CommercialProposalRepository commercialProposalRepository;
-    private final AddressRepository addressRepository;
-    private final AddressMapper addressMapper;
     private final ReviewMapper reviewMapper;
     private final OrderNotificationSender notificationSender;
 
@@ -41,15 +38,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderForUserDto createOrder(OrderCreationDto order) {
         OrderEntity entity = orderMapper.toEntity(order);
-        entity.setClient(SecurityContextAccessor.getAuthenticatedUser());
+        entity.setClientEmail(SecurityContextAccessor.getAuthenticatedUser().getUsername());
         entity.setCommercialProposals(order.getProposals().entrySet().stream()
                 .collect(Collectors.toMap(
                         x -> commercialProposalRepository.findById(x.getKey()).get(),
                         Map.Entry::getValue)));
-        entity.setAddress(addressRepository.findById(order.getAddress().getId())
-                .orElseGet(() -> addressRepository.save(addressMapper.toEntity(order.getAddress()))));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
-        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, entity.getClient().getEmail(), entity.getId(), entity.getOrderTime()));
+        String userEmail = SecurityContextAccessor.getAuthenticatedUser().getUsername();
+        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()));
         log.info("Order with id = {} successfully created", entity.getId());
         return orderDto;
     }
@@ -59,9 +55,9 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity entity = orderRepository.findById(order.getId()).orElseThrow(() ->
                 new NoSuchEntityException("Can`t find order by id: " + order.getId())
         );
-        if (!Objects.equals(entity.getClient().getId(), SecurityContextAccessor.getAuthenticatedUserId())) {
+        if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to update order of user id = {}",
-                    SecurityContextAccessor.getAuthenticatedUserId(), entity.getClient().getId());
+                    entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
             throw new AccessDeniedException("Access denied");
         }
         if (entity.getStatus().ordinal() >= Status.PREPARING.ordinal()) {
@@ -95,9 +91,9 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity entity = orderRepository.findById(review.getOrderId()).orElseThrow(() ->
                 new NoSuchEntityException("Can`t find order by id: " + review.getOrderId())
         );
-        if (!Objects.equals(entity.getClient().getId(), SecurityContextAccessor.getAuthenticatedUserId())) {
+        if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to update order of user id = {}",
-                    SecurityContextAccessor.getAuthenticatedUserId(), entity.getClient().getId());
+                    entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
             throw new AccessDeniedException("Access denied");
         }
         if (entity.getStatus() != Status.DONE) {
@@ -115,9 +111,9 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity entity = orderRepository.findById(id).orElseThrow(() ->
                 new NoSuchEntityException("Can`t find order by id: " + id)
         );
-        if (!Objects.equals(entity.getClient().getId(), SecurityContextAccessor.getAuthenticatedUserId())) {
+        if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to get order of user id = {}",
-                    SecurityContextAccessor.getAuthenticatedUserId(), entity.getClient().getId());
+                    entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
             throw new AccessDeniedException("Access denied");
         }
         return orderMapper.toUserDto(entity);
@@ -136,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity entity = orderRepository.findById(id).orElseThrow(() ->
                 new NoSuchEntityException("Can`t find order by id: " + id)
         );
-        if (!entity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUser())) {
+        if (!entity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUserId())) {
             log.warn("Employee id = {} trying to get order id = {}", SecurityContextAccessor.getAuthenticatedUserId(), id);
             throw new AccessDeniedException("Access denied");
         }
@@ -148,9 +144,9 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity entity = orderRepository.findById(orderId).orElseThrow(() ->
                 new NoSuchEntityException("Can`t find order by id: " + orderId)
         );
-        if (!Objects.equals(entity.getClient().getId(), SecurityContextAccessor.getAuthenticatedUserId())) {
+        if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to cancel order of user id = {}",
-                    SecurityContextAccessor.getAuthenticatedUserId(), entity.getClient().getId());
+                    entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
             throw new AccessDeniedException("Access denied");
         }
         entity.setStatus(Status.CANCELLED);
@@ -222,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
                     SecurityContextAccessor.getAuthenticatedUser(), orderId);
             return new NoSuchEntityException("Can`t find order by id: " + orderId);
         });
-        if (!orderEntity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUser())
+        if (!orderEntity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUserId())
                 && SecurityContextAccessor.getAuthenticatedUser().getRole() != Role.ADMIN) {
             log.warn("User id = {} trying to get change order by id id = {}",
                     SecurityContextAccessor.getAuthenticatedUserId(), orderEntity.getId());

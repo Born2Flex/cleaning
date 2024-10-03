@@ -1,7 +1,6 @@
 package ua.edu.ukma.cleaning.order;
 
 import org.mapstruct.*;
-import ua.edu.ukma.cleaning.address.AddressMapper;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.dto.OrderCreationDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForAdminDto;
@@ -12,11 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {AddressMapper.class, UserMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface OrderMapper {
     @Mappings({
             @Mapping(target = "creationTime", expression = "java(java.time.LocalDateTime.now())"),
-            @Mapping(target = "address", ignore = true),
             @Mapping(target = "status", expression = "java(ua.edu.ukma.cleaning.order.Status.NOT_VERIFIED)")
     })
     OrderEntity toEntity(OrderCreationDto order);
