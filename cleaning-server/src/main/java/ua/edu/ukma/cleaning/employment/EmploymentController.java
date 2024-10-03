@@ -3,8 +3,13 @@ package ua.edu.ukma.cleaning.employment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ua.edu.ukma.cleaning.storage.ResourceWithType;
 
 import java.util.List;
 
@@ -17,9 +22,18 @@ public class EmploymentController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @Operation(summary = "Create employment request", description = "Create employment request (user id take from security)")
-    @PostMapping
-    public EmploymentDto createRequest(@RequestBody String motivationList) {
-        return service.create(motivationList);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public EmploymentDto createRequest(@RequestPart("resume") MultipartFile resume) {
+        return service.create(resume);
+    }
+
+    @PreAuthorize("hasAnyAuthority({'ROLE_USER', 'ROLE_ADMIN'})")
+    @GetMapping(value = "/load-resume", produces = {MediaType.APPLICATION_PDF_VALUE})
+    public ResponseEntity<Resource> loadResume() {
+        ResourceWithType resource= service.loadResume();
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(resource.getMediaType()))
+                .body(resource.getResource());
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

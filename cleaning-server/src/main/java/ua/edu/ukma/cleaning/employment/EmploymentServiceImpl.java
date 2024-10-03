@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
+import ua.edu.ukma.cleaning.storage.ResourceWithType;
+import ua.edu.ukma.cleaning.storage.StorageService;
 import ua.edu.ukma.cleaning.user.UserServerClient;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
@@ -23,21 +26,22 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final EmploymentRepository repository;
     private final EmploymentMapper employmentMapper;
     private final OrderRepository orderRepository;
-
+    private final StorageService storageService;
     private final UserServerClient userServerClient;
 
     @Override
-    public EmploymentDto create(String motivationList) {
+    public EmploymentDto create(MultipartFile resumeFile) {
         if (repository.findByApplicantId(SecurityContextAccessor.getAuthenticatedUserId()).isPresent()) {
             log.info("User id = {} try to send more than 1 application for a job", SecurityContextAccessor.getAuthenticatedUserId());
             throw new AlreadyAppliedException("You have already applied for this position");
         }
-        EmploymentEntity employmentRequest = employmentMapper.toEntity(motivationList);
-        employmentRequest.setApplicantId(SecurityContextAccessor.getAuthenticatedUser().getId());
+        EmploymentEntity employmentRequest = new EmploymentEntity();
+        employmentRequest.setCreationTime(LocalDateTime.now());
+        employmentRequest.setApplicantId(SecurityContextAccessor.getAuthenticatedUserId());
+        EmploymentDto dto = employmentMapper.toDto(repository.save(employmentRequest));
+        storageService.storeFile(employmentRequest, resumeFile);
         log.info("Created new employment request with id = {}", employmentRequest.getId());
-        EmploymentDto employeeDto = employmentMapper.toDto(repository.save(employmentRequest));
-        employeeDto.setApplicant(userServerClient.getById(SecurityContextAccessor.getAuthenticatedUserId()));
-        return employeeDto;
+        return dto;
     }
 
     @Transactional
@@ -86,5 +90,11 @@ public class EmploymentServiceImpl implements EmploymentService {
             log.info("Can`t find application by user id = {}", userId);
             return new NoSuchEntityException("Can`t find application by user id: " + userId);
         });
+    }
+
+    @Override
+    public ResourceWithType loadResume() {
+        Long applicantId = SecurityContextAccessor.getAuthenticatedUserId();
+        return storageService.loadAsResource(repository.findByApplicantId(applicantId).orElseThrow());
     }
 }
