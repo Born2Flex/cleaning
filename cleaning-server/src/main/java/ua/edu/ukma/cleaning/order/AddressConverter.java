@@ -15,26 +15,21 @@ public class AddressConverter implements AttributeConverter<AddressDto, String> 
         }
 
         StringBuilder sb = new StringBuilder();
-        if (attribute.getCity() != null && !attribute.getCity().isEmpty()) {
+        if (attribute.getCity() != null && !attribute.getCity().isEmpty())
             sb.append(attribute.getCity());
-            sb.append(SEPARATOR);
-        }
-        if (attribute.getStreet() != null && !attribute.getStreet().isEmpty()) {
+        sb.append(SEPARATOR);
+        if (attribute.getStreet() != null && !attribute.getStreet().isEmpty())
             sb.append(attribute.getStreet());
-            sb.append(SEPARATOR);
-        }
-        if (attribute.getHouseNumber() != null && !attribute.getHouseNumber().isEmpty()) {
+        sb.append(SEPARATOR);
+        if (attribute.getHouseNumber() != null && !attribute.getHouseNumber().isEmpty())
             sb.append(attribute.getHouseNumber());
-            sb.append(SEPARATOR);
-        }
-        if (attribute.getFlatNumber() != null && !attribute.getFlatNumber().isEmpty()) {
+        sb.append(SEPARATOR);
+        if (attribute.getFlatNumber() != null && !attribute.getFlatNumber().isEmpty())
             sb.append(attribute.getFlatNumber());
-            sb.append(SEPARATOR);
-        }
-        if (attribute.getZip() != null && !attribute.getZip().isEmpty()) {
+        sb.append(SEPARATOR);
+        if (attribute.getZip() != null && !attribute.getZip().isEmpty())
             sb.append(attribute.getZip());
-            sb.append(SEPARATOR);
-        }
+        sb.append(SEPARATOR);
 
         return sb.toString();
     }

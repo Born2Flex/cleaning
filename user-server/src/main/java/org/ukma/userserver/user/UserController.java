@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @Operation(summary = "Find all users by Role", description = "Find all users by Role")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_CLEANING_SERVER')")
     @GetMapping("/by-role/{role}")
     public List<UserListDto> findAllByRole(@PathVariable Role role) {
         return userService.findUsersByRole(role);

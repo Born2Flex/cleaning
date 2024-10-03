@@ -19,7 +19,6 @@ public class OrderCreationDto {
     private Double price;
     @NotNull(message = "Order time can't be null")
     private LocalDateTime orderTime;
-    @NotNull(message = "Client email can't be null")
     private String clientEmail;
     private String comment;
     @NotNull(message = "Address of order can't be null")

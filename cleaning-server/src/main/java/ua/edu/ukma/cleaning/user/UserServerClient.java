@@ -1,24 +1,19 @@
 package ua.edu.ukma.cleaning.user;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import ua.edu.ukma.cleaning.security.JwtService;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -36,12 +31,17 @@ public class UserServerClient {
 
     private String authToken;
 
-    private final RestClient restClient = RestClient.create(userServerUrl);
+    private RestClient restClient;
 
     private final JwtService jwtService;
 
+    @PostConstruct
+    public void init() {
+        restClient = RestClient.create(userServerUrl);
+    }
+
     public UserDto getById(Long id) {
-        return makeApiRequest("/api/users", HttpMethod.GET, null, UserDto.class).getBody();
+        return makeApiRequest("/api/users/" + id, HttpMethod.GET, null, UserDto.class).getBody();
     }
 
     public void updateUser(UserDto userDto) {
@@ -49,7 +49,7 @@ public class UserServerClient {
     }
 
     public List<UserListDto> getAllByRole(Role role) {
-        return ((List<UserListDto>) makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, null, List.class).getBody());
+        return ((List<UserListDto>) makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, "", List.class).getBody());
     }
 
     public <T> ResponseEntity<T> makeApiRequest(String endpoint, HttpMethod method, Object requestBody, Class<T> responseType) {
@@ -57,14 +57,15 @@ public class UserServerClient {
             login();
         }
         try {
-            return restClient.method(method)
+            RestClient.RequestBodySpec request = restClient.method(method)
                     .uri(endpoint)
-                    .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + authToken)
-                    .body(requestBody)
-                    .retrieve()
+                    .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + authToken);
+            if (requestBody != null)
+                request.body(requestBody);
+            return request.retrieve()
                     .toEntity(responseType);
         } catch (Exception e) {
-            log.info("Error making request", e);
+            log.error("Error making request", e);
             throw new RuntimeException(e);
         }
     }

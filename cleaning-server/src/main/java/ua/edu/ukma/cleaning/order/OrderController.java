@@ -56,9 +56,9 @@ public class OrderController {
 
     @Operation(summary = "Get all orders by user id (pageable)", description = "Get all orders by user id (pageable)")
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
-    @GetMapping("/by-user/{id}")
-    public OrderPageDto getOrdersOfUser(@PathVariable Long id, @PageableDefault(sort = {"status","creationTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return orderService.findOrdersByUserId(id, pageable);
+    @GetMapping("/by-user/{email}")
+    public OrderPageDto getOrdersOfUser(@PathVariable String email, @PageableDefault(sort = {"status","creationTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return orderService.findOrdersByUserEmail(email, pageable);
     }
 
     @Operation(summary = "Get all orders of executor by id (pageable)", description = "Get all orders of executor by id (pageable)")

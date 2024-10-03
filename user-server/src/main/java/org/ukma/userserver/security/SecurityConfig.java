@@ -42,8 +42,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(login -> login.loginPage("/login").permitAll())
-                .logout(logout -> logout.deleteCookies("accessToken", "refreshToken")
-                        .permitAll().logoutUrl("/logout").logoutSuccessUrl("/"))
+                .logout(logout -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/"))
                 .build();
     }
 
@@ -58,10 +57,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder getEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

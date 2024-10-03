@@ -69,7 +69,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     @Override
     public Boolean unemployment(Long userId) {
         UserDto employee = userServerClient.getById(userId);
-        long countOfUnfinishedOrders = orderRepository.findOrdersByExecutorsId(employee.getId()).stream()
+        long countOfUnfinishedOrders = orderRepository.findOrdersByExecutorsContains(employee.getId()).stream()
                 .filter(order -> order.getStatus() != Status.CANCELLED && order.getStatus() != Status.DONE)
                 .filter(order -> order.getOrderTime().isAfter(LocalDateTime.now()))
                 .count();

@@ -25,16 +25,14 @@ CREATE TABLE IF NOT EXISTS orders
     price         DOUBLE PRECISION NOT NULL,
     order_time    TIMESTAMP(6) NOT NULL,
     creation_time TIMESTAMP(6) NOT NULL,
-    client        BIGINT,
+    client_email  VARCHAR(50) NOT NULL,
     comment       VARCHAR(500) DEFAULT NULL,
-    address       BIGINT NOT NULL,
+    address       VARCHAR(600) NOT NULL,
     review        BIGINT,
     status        VARCHAR(255) NOT NULL CHECK (status IN ('NOT_VERIFIED', 'VERIFIED', 'NOT_STARTED', 'PREPARING', 'IN_PROGRESS', 'DONE', 'CANCELLED')),
     duration      NUMERIC(21, 0) NOT NULL,
     UNIQUE (review),
-    CONSTRAINT FKg8nkrjl2e7h9vmisqk3wb6mf4 FOREIGN KEY (client) REFERENCES users (id),
-    CONSTRAINT FKm5koajka35938tnksntkrm9mf FOREIGN KEY (review) REFERENCES reviews (id),
-    CONSTRAINT FKqqw5cd6q594ac1ifjxbq1cian FOREIGN KEY (address) REFERENCES addresses (id)
+    CONSTRAINT FKm5koajka35938tnksntkrm9mf FOREIGN KEY (review) REFERENCES reviews (id)
 );
 
 CREATE TABLE IF NOT EXISTS executors
@@ -42,8 +40,7 @@ CREATE TABLE IF NOT EXISTS executors
     order_id BIGINT NOT NULL,
     user_id  BIGINT NOT NULL,
     PRIMARY KEY (order_id, user_id),
-    CONSTRAINT FK50l4atwr0jkewagj8xeod1kbr FOREIGN KEY (order_id) REFERENCES orders (id),
-    CONSTRAINT FKs9vfdbexrmy2c2l4kdyw33mcm FOREIGN KEY (user_id) REFERENCES users (id)
+    CONSTRAINT FK50l4atwr0jkewagj8xeod1kbr FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 
 CREATE TABLE IF NOT EXISTS order_commercial_proposals_mapping
@@ -55,27 +52,6 @@ CREATE TABLE IF NOT EXISTS order_commercial_proposals_mapping
     CONSTRAINT FKj2n80auouo3faxnku0h3nk0vb FOREIGN KEY (commercial_proposal_id) REFERENCES commercial_proposals (id),
     CONSTRAINT FKmrtujudo0hvqv397xk1n5pk86 FOREIGN KEY (order_id) REFERENCES orders (id)
 );
-
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)
-VALUES ('Leonid', 'Petrenko', 'Ihorovich', '$2a$10$6DI5oh7MbZX7DSkdHOfdlOc6GXj2gH8Qgyo5VCmuldGnAkEMlo3GO', 'admin', '+380930000000', 'ADMIN');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Maizie', 'Burnett', 'Viktorovivna', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'm.burnatt@gmail.com', '+380931234567','USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Danylo', 'Shlapak', 'Vitaliyovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'd64566994@gmail.com', '+380931234561','USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Myhailo', 'Shevchenko', 'Grygorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'muhailo11111@gmail.com', '+380931234562','USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: Qw3rty*
-VALUES ('Oleksandr', 'Semytsky', 'Igorovych', '$2a$10$lFW0pKbU24UkSlBFoANN0uE/FETJJCf66iDUOMZS8JYgmgeVvx6L2', 'ssemitskiy@gmail.com', '+380945234563','USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: P4ssw()rd
-VALUES ('Chaya', 'Burnett', 'Petrivna', '$2a$10$3ezDfbsXuVb817/MgR9D5e2ERNHZDckq/0kqx1SwWHnYTdnSmZz7y', 'c.burnett@outlook.com', '+380685812781', 'EMPLOYEE');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: password
-VALUES ('Bobby', 'Durham', 'Ihorovich', '$2a$10$khRH0cGfqeo6S8uux6o.suCG32m1qxxj60mP3m7eIK3ibWjkB4nXW', 'b.durman@gmail.com', '+380503215691', 'USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: us3r
-VALUES ('Micheal', 'Jacobson', 'Olegovich', '$2a$10$jt6bt5yQowuPz.W0KFvqu.Q1LdJpl0C0nRaTd2VQkby194BitHoBO', 'm.jacobs@gmail.com', '+380521785665', 'USER');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: qwerty
-VALUES ('Kallum', 'Charles', 'Ivanovna', '$2a$10$mLur1uQN0ZRORjvPMAo.OeBOYsTbz4h3fp/hOEoaWvBEiiNDr/5S2', 'k.charles@i.ua', '+380951234567', 'EMPLOYEE');
-INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)-- password: password
-VALUES ('Alys', 'Bonner', 'Semenivna', '$2a$10$khRH0cGfqeo6S8uux6o.suCG32m1qxxj60mP3m7eIK3ibWjkB4nXW', 'a.bonner@gmail.com', '+380679831471', 'EMPLOYEE');
 
 INSERT INTO commercial_proposals (name, short_description, full_description, count_of_employee, duration, price, type) -- 15m/900s (+000000000)
 VALUES ('Подушка велика', 'Велика подушка з легкоочищуваного матеріалу', 'Подушка 70х70 з екопуху/пуху/бамбуку, без глибоких складних забруднень, без пошкоджень, що вимагають делікатної чистки. Білосніжні подушки не підпадають у цю категорію.', 1, 900000000000, 220, 'PER_ITEM');

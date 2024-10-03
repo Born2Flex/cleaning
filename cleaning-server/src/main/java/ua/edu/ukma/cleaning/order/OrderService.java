@@ -15,13 +15,9 @@ public interface OrderService {
     OrderForAdminDto getOrderByIdForAdmin(Long id);
     OrderForUserDto getOrderByIdForEmployee(Long id);
     Boolean cancelOrderById(Long orderId);
-    List<OrderListDto> getAllOrders();
-    List<OrderListDto> getAllOrdersByStatus(Status status);
-    List<OrderListDto> getAllOrdersByUserId(Long id);
-
     OrderPageDto findOrdersByPage(Pageable pageable);
     OrderPageDto findOrdersByStatusAndPage(Status status, Pageable pageable);
     OrderPageDto findOrdersByExecutorId(Long id, Pageable pageable);
-    OrderPageDto findOrdersByUserId(Long id, Pageable pageable);
+    OrderPageDto findOrdersByUserEmail(String email, Pageable pageable);
     OrderListDto changeOrderStatus(Long orderId, Status status);
 }

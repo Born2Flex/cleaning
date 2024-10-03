@@ -19,7 +19,6 @@ import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityEx
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -156,22 +155,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderListDto> getAllOrders() {
-        return orderMapper.toListDto(orderRepository.findAll());
-    }
-
-    @Override
-    public List<OrderListDto> getAllOrdersByStatus(Status status) {
-        return orderMapper.toListDto(orderRepository.findAllByStatus(status));
-    }
-
-    @Override
-    public List<OrderListDto> getAllOrdersByUserId(Long id) {
-        return orderMapper.toListDto(orderRepository.findAllByStatusNotAndClientIdIs(Status.CANCELLED, id));
-    }
-
-
-    @Override
     public OrderPageDto findOrdersByPage(Pageable pageable) {
         Page<OrderEntity> orders = orderRepository.findAll(pageable);
         int totalPages = orders.getTotalPages();
@@ -193,20 +176,20 @@ public class OrderServiceImpl implements OrderService {
                     SecurityContextAccessor.getAuthenticatedUserId(), id);
             throw new AccessDeniedException("Access denied");
         }
-        Page<OrderEntity> orders = orderRepository.findOrdersByExecutorsId(id, pageable);
+        Page<OrderEntity> orders = orderRepository.findOrdersByExecutorsContains(id, pageable);
         int totalPages = orders.getTotalPages();
         return new OrderPageDto(pageable.getPageNumber(), totalPages, orderMapper.toListDto(orders.stream().toList()));
     }
 
     @Override
-    public OrderPageDto findOrdersByUserId(Long id, Pageable pageable) {
+    public OrderPageDto findOrdersByUserEmail(String email, Pageable pageable) {
         if (SecurityContextAccessor.getAuthorities().contains("ROLE_USER")
-                && !Objects.equals(SecurityContextAccessor.getAuthenticatedUserId(), id)) {
+                && !Objects.equals(SecurityContextAccessor.getAuthenticatedUser().getUsername(), email)) {
             log.warn("User id = {} trying to get orders of user id = {}",
-                    SecurityContextAccessor.getAuthenticatedUserId(), id);
+                    SecurityContextAccessor.getAuthenticatedUserId(), email);
             throw new AccessDeniedException("Access denied");
         }
-        Page<OrderEntity> orders = orderRepository.findOrdersByClientId(id, pageable);
+        Page<OrderEntity> orders = orderRepository.findOrdersByClientEmail(email, pageable);
         int totalPages = orders.getTotalPages();
         return new OrderPageDto(pageable.getPageNumber(), totalPages, orderMapper.toListDto(orders.stream().toList()));
     }

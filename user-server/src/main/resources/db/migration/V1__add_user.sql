@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS addresses
     street       VARCHAR(255) NOT NULL,
     house_number VARCHAR(255) NOT NULL,
     flat_number  VARCHAR(255) DEFAULT NULL,
-    zip          VARCHAR(255) DEFAULT NULL
+    zip          VARCHAR(255) DEFAULT NULL,
+    user_id      BIGINT NOT NULL REFERENCES users(id)
 );
 
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)

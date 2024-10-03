@@ -48,6 +48,7 @@ public class OrderEntity {
     private String comment;
 
     @Convert(converter = AddressConverter.class)
+    @Column(name = "address")
     private AddressDto address;
 
     @OneToOne()
