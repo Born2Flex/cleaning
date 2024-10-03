@@ -26,8 +26,7 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "addressList", ignore = true),
-            @Mapping(target = "role", ignore = true)
+            @Mapping(target = "addressList", ignore = true)
     })
     void updateFields(@MappingTarget UserEntity entity, UserDto user);
 

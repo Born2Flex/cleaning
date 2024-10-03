@@ -10,16 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ukma.userserver.exceptions.EmailDuplicateException;
 import org.ukma.userserver.exceptions.NoSuchEntityException;
-import org.ukma.userserver.exceptions.PhoneNumberDuplicateException;
 import org.ukma.userserver.user.models.Role;
 import org.ukma.userserver.user.models.UserDto;
 import org.ukma.userserver.user.models.UserPageDto;
 import org.ukma.userserver.user.models.UserPasswordDto;
 import org.ukma.userserver.user.models.UserRegistrationDto;
 import org.ukma.userserver.utils.SecurityContextAccessor;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,20 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto user) {
         UserEntity userEntity = SecurityContextAccessor.getAuthenticatedUser();
-        Optional<UserEntity> userEntityByEmail = userRepository.findUserEntityByEmail(user.getEmail());
-        userEntityByEmail.ifPresent(existingUser -> {
-            if (!Objects.equals(userEntity.getId(), existingUser.getId())) {
-                log.info("User id = {} try to use email that is already in use", userEntity.getId());
-                throw new EmailDuplicateException("Email already in use!");
-            }
-        });
-        Optional<UserEntity> userEntityByPhone = userRepository.findUserEntityByPhoneNumber(user.getPhoneNumber());
-        userEntityByPhone.ifPresent(existingUser -> {
-            if (!Objects.equals(userEntity.getId(), existingUser.getId())) {
-                log.info("User id = {} try to use phone number that is already in use", userEntity.getId());
-                throw new PhoneNumberDuplicateException("Phone number already in use!");
-            }
-        });
         userMapper.updateFields(userEntity, user);
         log.debug("Data of user id = {} successfully updated", userEntity.getId());
         return userMapper.toDto(userRepository.save(userEntity));
