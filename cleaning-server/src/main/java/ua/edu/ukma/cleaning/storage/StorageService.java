@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class StorageService {
     private final MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
-    @Value("${storage.root-dir:C:/resources/storage}")
+    @Value("${storage.root-dir:src/main/resources/storage}")
     private String rootDir;
     public void storeFile(Storageable storageable, MultipartFile file) {
         validateFile(storageable, file);
