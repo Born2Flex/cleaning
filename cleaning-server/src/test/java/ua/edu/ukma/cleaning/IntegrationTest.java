@@ -4,11 +4,13 @@ import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -26,9 +28,7 @@ import ua.edu.ukma.cleaning.user.Role;
 import java.io.File;
 
 @Slf4j
-//@Sql(value = {"/init.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/init2.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "storage.root-dir=src/test/resources/storage")
 public class IntegrationTest {
@@ -40,8 +40,6 @@ public class IntegrationTest {
     protected OrderRepository orderRepository;
     @Autowired
     protected ReviewRepository reviewRepository;
-    @MockBean
-    private JwtService jwtService;
     @Value("${storage.root-dir:src/test/resources/storage}")
     protected String storageDirectory;
     protected AuthenticatedUser user = new AuthenticatedUser(1L, Role.USER, "user@gmail.com");
@@ -55,10 +53,6 @@ public class IntegrationTest {
     void setUp() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = serverPort;
-        Mockito.when(jwtService.validateToken(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(jwtService.extractUser(userToken)).thenReturn(user);
-        Mockito.when(jwtService.extractUser(employeeToken)).thenReturn(employee);
-        Mockito.when(jwtService.extractUser(adminToken)).thenReturn(admin);
     }
 
     @AfterEach
@@ -70,8 +64,7 @@ public class IntegrationTest {
         reviewRepository.deleteAll();
     }
 
-    @Container
-    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:latest")
+    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer("postgres:latest")
             .withDatabaseName("test-db")
             .withUsername("test")
             .withPassword("test");

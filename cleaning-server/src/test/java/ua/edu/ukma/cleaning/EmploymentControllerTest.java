@@ -2,7 +2,10 @@ package ua.edu.ukma.cleaning;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.edu.ukma.cleaning.employment.EmploymentDto;
+import ua.edu.ukma.cleaning.security.JwtService;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +16,18 @@ import java.nio.file.Paths;
 import static io.restassured.RestAssured.given;
 
 public class EmploymentControllerTest extends IntegrationTest {
+    @MockBean
+    private JwtService jwtService;
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        Mockito.when(jwtService.validateToken(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(jwtService.extractUser(userToken)).thenReturn(user);
+        Mockito.when(jwtService.extractUser(employeeToken)).thenReturn(employee);
+        Mockito.when(jwtService.extractUser(adminToken)).thenReturn(admin);
+    }
 
     @Test
     public void createEmploymentWithResumeTest() throws IOException {

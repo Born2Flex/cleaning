@@ -3,6 +3,8 @@ package ua.edu.ukma.cleaning;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import ua.edu.ukma.cleaning.address.AddressDto;
 import ua.edu.ukma.cleaning.order.OrderEntity;
@@ -21,27 +23,21 @@ import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 import io.restassured.module.jsv.JsonSchemaValidator;
+import ua.edu.ukma.cleaning.security.JwtService;
 
 @Slf4j
 public class ReviewControllerTests extends IntegrationTest {
-//    @Test
-//    public void loginTest() throws InterruptedException {
-//        RestAssured.baseURI = userCleaningUrl;
-//        RestAssured.port = userCleaningPort;
-//        given()
-//                .contentType("application/json")
-//                .body(userData)
-//                .when()
-//                .post("/api/auth/login")
-//                .then()
-//                .statusCode(200);
-//    }
-
+    @MockBean
+    protected JwtService jwtService;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
+        Mockito.when(jwtService.validateToken(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(jwtService.extractUser(userToken)).thenReturn(user);
+        Mockito.when(jwtService.extractUser(employeeToken)).thenReturn(employee);
+        Mockito.when(jwtService.extractUser(adminToken)).thenReturn(admin);
         ReviewEntity review = reviewRepository.save(new ReviewEntity(null, 5L, 5L, "good"));
         orderRepository.save(new OrderEntity(0l, 1100.0,
                 LocalDateTime.of(2023,8,22,18,0),
@@ -74,7 +70,7 @@ public class ReviewControllerTests extends IntegrationTest {
                 .when()
                 .get("/api/orders/review/1")
                 .then()
-                .statusCode(500);
+                .statusCode(403);
     }
 
     @Test
