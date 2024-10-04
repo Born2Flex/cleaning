@@ -82,14 +82,6 @@ public class OrderController {
         return orderService.updateOrderForUser(order);
     }
 
-
-    @Operation(summary = "Create review for order", description = "Create review for order")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @PutMapping("/update/review")
-    public OrderForUserDto reviewOrder(@Valid @RequestBody ReviewDto review) {
-        return orderService.updateReview(review);
-    }
-
     @Operation(summary = "Create order", description = "Create order")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
