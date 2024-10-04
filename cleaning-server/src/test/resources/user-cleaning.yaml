@@ -1,0 +1,29 @@
+version: '3'
+services:
+
+  user-cleaning:
+    image: "zeltronick/user-cleaning:latest"
+    links:
+      - user-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user
+      SPRING_DATASOURCE_USERNAME: userserver
+      SPRING_DATASOURCE_PASSWORD: 8(efQ8cx1H]q
+    depends_on:
+      - user-db
+
+  user-db:
+    image: "postgres:latest"
+    ports:
+      - "4126:5432"
+    environment:
+      POSTGRES_USER: userserver
+      POSTGRES_PASSWORD: 8(efQ8cx1H]q
+      POSTGRES_DB: user
+    volumes:
+      - user-data:/var/lib/postgres/data
+
+volumes:
+  cleaning-data:
+  cleaning-conf:
+  user-data:
