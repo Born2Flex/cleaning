@@ -1,6 +1,7 @@
 package ua.edu.ukma.cleaning.utils.exceptionHandler;
 
 
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.stream.Collectors;
 
@@ -32,9 +32,9 @@ public class GlobalHandler {
         return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public RedirectView handleAccessDeniedException(AccessDeniedException e) {
-        return new RedirectView("/");
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+        return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(NoSuchEntityException.class)
@@ -43,8 +43,10 @@ public class GlobalHandler {
     }
 
     @ExceptionHandler
-    public String handleUnexpectedException(Exception e) {
-        return "unexpectedError";
+    public ResponseEntity<String> handleUnexpectedException(Exception e) {
+        log.error(e.getMessage());
+        log.error(e.getClass().toString());
+        return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private static String formatMessage(String message) {

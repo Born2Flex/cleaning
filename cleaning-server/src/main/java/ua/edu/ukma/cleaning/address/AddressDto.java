@@ -2,11 +2,13 @@ package ua.edu.ukma.cleaning.address;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class AddressDto {
     @NotNull(message = "City can't be null!")
     @NotBlank(message = "City can't be blank!")

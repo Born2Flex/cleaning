@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ukma.userserver.address.AddressEntity;
+import org.ukma.userserver.exceptions.AccessDeniedException;
 import org.ukma.userserver.exceptions.EmailDuplicateException;
 import org.ukma.userserver.exceptions.NoSuchEntityException;
 import org.ukma.userserver.user.models.Role;
@@ -19,6 +21,7 @@ import org.ukma.userserver.utils.SecurityContextAccessor;
 import org.ukma.userserver.user.models.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -66,6 +69,24 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(encoder.encode(user.getPassword()));
         log.info("Password of user id = {} was changed", user.getId());
         return userMapper.toDto(userRepository.save(userEntity));
+    }
+
+    @Override
+    public Boolean deleteById(Long id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
+        {
+            log.info("Can`t find user by id = {}", id);
+            return new NoSuchEntityException("Can`t find user by id: " + id);
+        });
+        if (userEntity != null && !Objects.equals(userEntity.getId(),
+                SecurityContextAccessor.getAuthenticatedUserId())) {
+            log.info("User id = {} try to delete user with id = {}",
+                    SecurityContextAccessor.getAuthenticatedUserId(), userEntity.getId());
+            throw new AccessDeniedException("Access denied");
+        }
+        userRepository.deleteById(id);
+        log.info("User with id = {} was deleted", id);
+        return true;
     }
 
     @Override

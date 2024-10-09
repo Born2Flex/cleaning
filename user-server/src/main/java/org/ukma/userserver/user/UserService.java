@@ -12,7 +12,7 @@ public interface UserService {
     UserDto getUser();
     UserDto getByEmail(String email);
     UserDto updatePassword(UserPasswordDto user);
-
+    Boolean deleteById(Long id);
     UserPageDto findUsersByPageAndRole(Role role, Pageable pageable);
     List<UserListDto> findUsersByRole(Role role);
 }
