@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.ukma.notificationserver.models.OrderNotification;
 import org.ukma.notificationserver.models.OrderNotificationType;
+import org.ukma.notificationserver.models.UserDeleteMessage;
 
 import java.time.format.DateTimeFormatter;
 
@@ -36,8 +37,7 @@ public class MailService {
         try {
             javaMailSender.send(mailMessage);
         } catch (MailException e) {
-            log.error("Can`t send email for user: " + order.getEmail()
-                    + ", for order with id: " + order.getOrderId() + ", with error: " + e);
+            log.error("Can`t send email for user: {}, for order with id: {}, with error:", order.getEmail(), order.getOrderId(), e);
         }
     }
 
@@ -53,8 +53,27 @@ public class MailService {
         try {
             javaMailSender.send(mailMessage);
         } catch (MailException e) {
-            log.error("Can`t send email for user: " + order.getEmail()
-                    + ", for order with id: "  + ", with error: " + e);
+            log.error("Can`t send email for user: {}, for order with id: {}, with error:", order.getEmail(), order.getOrderId(), e);
+        }
+    }
+
+    public void sendUserDeletionEmail(UserDeleteMessage user) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.email());
+        mailMessage.setSubject("Notification");
+        mailMessage.setText(String.format("""
+                Dear %s,
+                
+                We’re sorry to see you go. Your account has been successfully deleted. If you have any feedback or questions, please feel free to reach out.
+                
+                Thank you for being with us!
+                
+                Best regards,
+                """, user.name()));
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException e) {
+            log.error("Can`t send email for user: {}, with error: ", user.email(), e);
         }
     }
 }

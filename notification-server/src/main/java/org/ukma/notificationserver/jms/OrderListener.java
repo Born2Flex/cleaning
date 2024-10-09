@@ -10,6 +10,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import org.ukma.notificationserver.mails.MailService;
 import org.ukma.notificationserver.models.OrderNotification;
+import org.ukma.notificationserver.models.UserDeleteMessage;
 
 @Component
 @Slf4j
@@ -28,6 +29,14 @@ public class OrderListener {
     public void processOrderMessage(String notification) {
         OrderNotification orderNotification = objectMapper.readValue(notification, OrderNotification.class);
         mailService.processOrderNotification(orderNotification);
-        log.trace("Received " + orderNotification);
+        log.trace("Received {}", orderNotification);
+    }
+
+    @SneakyThrows
+    @JmsListener(destination = "${user.delete.topic}", containerFactory = "topicFactory")
+    public void topicListener(String userData) {
+        UserDeleteMessage userDeleteMessage = objectMapper.readValue(userData, UserDeleteMessage.class);
+        mailService.sendUserDeletionEmail(userDeleteMessage);
+        log.info("Received {}", userDeleteMessage);
     }
 }

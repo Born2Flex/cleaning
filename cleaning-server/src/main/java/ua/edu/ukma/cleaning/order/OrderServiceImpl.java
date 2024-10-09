@@ -1,9 +1,12 @@
 package ua.edu.ukma.cleaning.order;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
@@ -19,6 +22,7 @@ import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityEx
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final CommercialProposalRepository commercialProposalRepository;
     private final ReviewMapper reviewMapper;
     private final OrderNotificationSender notificationSender;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     @Transactional
@@ -209,5 +214,16 @@ public class OrderServiceImpl implements OrderService {
         }
         orderEntity.setStatus(status);
         return orderMapper.toListDto(orderRepository.save(orderEntity));
+    }
+
+    @SneakyThrows
+    @JmsListener(destination = "${user.delete.topic}", containerFactory = "topicFactory")
+    public void cancelAllOrdersOfUser(String userData) {
+        UserDeleteMessage userDeleteMessage = objectMapper.readValue(userData, UserDeleteMessage.class);
+        List<OrderEntity> userOrders = orderRepository
+                .findAllByStatusInAndClientEmail(List.of(Status.NOT_VERIFIED, Status.VERIFIED, Status.PREPARING), userDeleteMessage.email());
+        List<OrderEntity> canceledOrders = userOrders.stream().peek(order -> order.setStatus(Status.CANCELLED)).toList();
+        orderRepository.saveAll(canceledOrders);
+        log.info("All orders of user {} was canceled", userDeleteMessage.email());
     }
 }
