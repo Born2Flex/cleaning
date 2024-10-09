@@ -1,4 +1,4 @@
-package org.ukma.userserver.utils;
+package org.ukma.userserver.utils.config;
 
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;

@@ -3,6 +3,7 @@ package org.ukma.userserver.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,8 @@ import org.ukma.userserver.address.AddressEntity;
 import org.ukma.userserver.exceptions.AccessDeniedException;
 import org.ukma.userserver.exceptions.EmailDuplicateException;
 import org.ukma.userserver.exceptions.NoSuchEntityException;
+import org.ukma.userserver.jms.UserDeleteMessage;
+import org.ukma.userserver.jms.UserDeleteSender;
 import org.ukma.userserver.user.models.Role;
 import org.ukma.userserver.user.models.UserDto;
 import org.ukma.userserver.user.models.UserPageDto;
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserDeleteSender userDeleteSender;
 
     @Override
     public UserDto create(UserRegistrationDto user) {
@@ -78,14 +82,18 @@ public class UserServiceImpl implements UserService {
             log.info("Can`t find user by id = {}", id);
             return new NoSuchEntityException("Can`t find user by id: " + id);
         });
-        if (userEntity != null && !Objects.equals(userEntity.getId(),
-                SecurityContextAccessor.getAuthenticatedUserId())) {
+        if (!Objects.equals(userEntity.getId(), SecurityContextAccessor.getAuthenticatedUserId())) {
             log.info("User id = {} try to delete user with id = {}",
                     SecurityContextAccessor.getAuthenticatedUserId(), userEntity.getId());
             throw new AccessDeniedException("Access denied");
         }
         userRepository.deleteById(id);
         log.info("User with id = {} was deleted", id);
+        userDeleteSender.sendMessage(new UserDeleteMessage(
+                id,
+                userEntity.getEmail(),
+                userEntity.getName()
+        ));
         return true;
     }
 
