@@ -33,7 +33,7 @@ public class SchedulerConfig {
                         .filter(order -> order.getStatus() != Status.NOT_VERIFIED)
                         .toList();
         orders.forEach(order -> order.setStatus(Status.PREPARING));
-        orders.forEach(order -> notificationSender.sendMessage(new OrderNotification(OrderNotificationType.REMINDING, order.getClientEmail(), order.getId(), order.getOrderTime())));
+        orders.forEach(order -> notificationSender.sendMessage(new OrderNotification(OrderNotificationType.REMINDING, order.getClientEmail(), order.getId(), order.getOrderTime()), 5));
         orderRepository.saveAll(orders);
         log.info("Orders status set, and notification sent");
     }

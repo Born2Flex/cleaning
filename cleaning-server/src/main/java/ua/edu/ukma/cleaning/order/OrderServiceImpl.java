@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
                         Map.Entry::getValue)));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
         String userEmail = SecurityContextAccessor.getAuthenticatedUser().getUsername();
-        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()));
+        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()), 2);
         log.info("Order with id = {} successfully created", entity.getId());
         return orderDto;
     }

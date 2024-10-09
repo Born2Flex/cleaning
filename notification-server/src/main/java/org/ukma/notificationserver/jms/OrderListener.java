@@ -24,7 +24,7 @@ public class OrderListener {
     }
 
     @SneakyThrows
-    @JmsListener(destination = "${order.notification.queue}")
+    @JmsListener(destination = "${order.notification.queue}", selector = "priority > 1")
     public void processOrderMessage(String notification) {
         OrderNotification orderNotification = objectMapper.readValue(notification, OrderNotification.class);
         mailService.processOrderNotification(orderNotification);
