@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS addresses
     house_number VARCHAR(255) NOT NULL,
     flat_number  VARCHAR(255) DEFAULT NULL,
     zip          VARCHAR(255) DEFAULT NULL,
-    user_id      BIGINT NOT NULL REFERENCES users(id)
+    user_id      BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE  ON UPDATE CASCADE
 );
 
 INSERT INTO users (name, surname, patronymic, password, email, phone_number, role)
