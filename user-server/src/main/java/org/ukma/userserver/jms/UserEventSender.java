@@ -1,7 +1,6 @@
 package org.ukma.userserver.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.jms.TextMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class UserDeleteSender {
+public class UserEventSender {
     @Autowired
     JmsTemplate jmsTemplate;
 
-    @Value("${user.delete.topic}")
+    @Value("${user.event.topic}")
     private String topic;
 
     private final ObjectMapper objectMapper;
 
-    public void sendMessage(UserDeleteMessage userDeleteMessage) {
+    public void sendEvent(UserEvent userEvent) {
         try{
-            jmsTemplate.convertAndSend(topic, objectMapper.writeValueAsString(userDeleteMessage));
+            jmsTemplate.convertAndSend(topic, objectMapper.writeValueAsString(userEvent));
         } catch(Exception e){
             log.error("Recieved Exception during send Message: ", e);
         }

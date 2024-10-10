@@ -3,18 +3,16 @@ package org.ukma.userserver.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.ukma.userserver.address.AddressEntity;
 import org.ukma.userserver.exceptions.AccessDeniedException;
 import org.ukma.userserver.exceptions.EmailDuplicateException;
 import org.ukma.userserver.exceptions.NoSuchEntityException;
-import org.ukma.userserver.jms.UserDeleteMessage;
-import org.ukma.userserver.jms.UserDeleteSender;
+import org.ukma.userserver.jms.UserEvent;
+import org.ukma.userserver.jms.UserEventSender;
 import org.ukma.userserver.user.models.Role;
 import org.ukma.userserver.user.models.UserDto;
 import org.ukma.userserver.user.models.UserPageDto;
@@ -33,14 +31,16 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserDeleteSender userDeleteSender;
+    private final UserEventSender userEventSender;
 
     @Override
     public UserDto create(UserRegistrationDto user) {
         if (userRepository.findUserEntityByEmail(user.getEmail()).isPresent()) {
             throw new EmailDuplicateException("Email already in use!");
         }
-        UserDto userDto = userMapper.toDto(userRepository.save(userMapper.toEntity(user, encoder)));
+        UserEntity created = userRepository.save(userMapper.toEntity(user, encoder));
+        UserDto userDto = userMapper.toDto(created);
+        userEventSender.sendEvent(UserEvent.createEventFrom(created));
         log.info("Created new user with id = {}", userDto.getId());
         return userDto;
     }
@@ -89,11 +89,7 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
         log.info("User with id = {} was deleted", id);
-        userDeleteSender.sendMessage(new UserDeleteMessage(
-                id,
-                userEntity.getEmail(),
-                userEntity.getName()
-        ));
+        userEventSender.sendEvent(UserEvent.deleteEventFrom(userEntity));
         return true;
     }
 

@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import ua.edu.ukma.cleaning.jms.OrderNotification;
+import ua.edu.ukma.cleaning.jms.models.OrderNotification;
 import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
-import ua.edu.ukma.cleaning.jms.OrderNotificationType;
+import ua.edu.ukma.cleaning.jms.models.OrderNotificationType;
 import ua.edu.ukma.cleaning.order.OrderEntity;
 import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
@@ -33,7 +33,7 @@ public class SchedulerConfig {
                         .filter(order -> order.getStatus() != Status.NOT_VERIFIED)
                         .toList();
         orders.forEach(order -> order.setStatus(Status.PREPARING));
-        orders.forEach(order -> notificationSender.sendMessage(new OrderNotification(OrderNotificationType.REMINDING, order.getClientEmail(), order.getId(), order.getOrderTime()), 5));
+        orders.forEach(order -> notificationSender.sendMessage(new OrderNotification(OrderNotificationType.REMINDING, order.getClientEmail(), order.getId(), order.getOrderTime())));
         orderRepository.saveAll(orders);
         log.info("Orders status set, and notification sent");
     }

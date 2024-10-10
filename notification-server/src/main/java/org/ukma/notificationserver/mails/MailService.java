@@ -6,9 +6,9 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.ukma.notificationserver.jms.models.UserEvent;
 import org.ukma.notificationserver.models.OrderNotification;
 import org.ukma.notificationserver.models.OrderNotificationType;
-import org.ukma.notificationserver.models.UserDeleteMessage;
 
 import java.time.format.DateTimeFormatter;
 
@@ -57,7 +57,27 @@ public class MailService {
         }
     }
 
-    public void sendUserDeletionEmail(UserDeleteMessage user) {
+    public void sendUserCreateEmail(UserEvent user) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.email());
+        mailMessage.setSubject("Notification");
+        mailMessage.setText(String.format("""
+                Dear %s,
+                
+                Thank you for registering with Spring Boot Cleaning! We’re excited to have you on board and look forward to helping you get the most out of our services.
+                
+                Thank you for being with us!
+                
+                Best regards,
+                """, user.name()));
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException e) {
+            log.error("Can`t send email for user: {}, with error: ", user.email(), e);
+        }
+    }
+
+    public void sendUserDeletionEmail(UserEvent user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.email());
         mailMessage.setSubject("Notification");

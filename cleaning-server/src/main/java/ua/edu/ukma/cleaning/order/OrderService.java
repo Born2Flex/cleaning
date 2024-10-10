@@ -4,8 +4,6 @@ import org.springframework.data.domain.Pageable;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 
-import java.util.List;
-
 public interface OrderService {
     OrderForUserDto createOrder(OrderCreationDto order);
     OrderForUserDto updateOrderForUser(OrderForUserDto order);

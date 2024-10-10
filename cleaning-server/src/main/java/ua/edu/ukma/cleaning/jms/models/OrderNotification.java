@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.jms;
+package ua.edu.ukma.cleaning.jms.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

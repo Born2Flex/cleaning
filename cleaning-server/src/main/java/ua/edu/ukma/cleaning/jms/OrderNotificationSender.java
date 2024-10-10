@@ -1,14 +1,13 @@
 package ua.edu.ukma.cleaning.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.jms.TextMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
+import ua.edu.ukma.cleaning.jms.models.OrderNotification;
 
 @Component
 @Slf4j
@@ -22,16 +21,9 @@ public class OrderNotificationSender {
 
     private final ObjectMapper objectMapper;
 
-    public void sendMessage(OrderNotification order, int priorityLevel){
+    public void sendMessage(OrderNotification order){
         try{
-            String message = objectMapper.writeValueAsString(order);
-            jmsTemplate.send(queue, session -> {
-                TextMessage textMessage = session.createTextMessage(message);
-                textMessage.setIntProperty("priority", priorityLevel);
-                return textMessage;
-            });
-            // Previous code
-            //jmsTemplate.convertAndSend(queue, objectMapper.writeValueAsString(order));
+            jmsTemplate.convertAndSend(queue, objectMapper.writeValueAsString(order));
         } catch(Exception e){
             log.error("Recieved Exception during send Message: ", e);
         }

@@ -1,18 +1,16 @@
 package ua.edu.ukma.cleaning.order;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
-import ua.edu.ukma.cleaning.jms.OrderNotification;
-import ua.edu.ukma.cleaning.jms.OrderNotificationType;
+import ua.edu.ukma.cleaning.jms.models.OrderNotification;
+import ua.edu.ukma.cleaning.jms.models.OrderNotificationType;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
+import ua.edu.ukma.cleaning.jms.models.UserEvent;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 import ua.edu.ukma.cleaning.order.review.ReviewMapper;
@@ -30,13 +28,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CommercialProposalRepository commercialProposalRepository;
     private final ReviewMapper reviewMapper;
     private final OrderNotificationSender notificationSender;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     @Transactional
@@ -49,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
                         Map.Entry::getValue)));
         OrderForUserDto orderDto = orderMapper.toUserDto(orderRepository.save(entity));
         String userEmail = SecurityContextAccessor.getAuthenticatedUser().getUsername();
-        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()), 2);
+        notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()));
         log.info("Order with id = {} successfully created", entity.getId());
         return orderDto;
     }
@@ -216,14 +213,12 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toListDto(orderRepository.save(orderEntity));
     }
 
-    @SneakyThrows
-    @JmsListener(destination = "${user.delete.topic}", containerFactory = "topicFactory")
-    public void cancelAllOrdersOfUser(String userData) {
-        UserDeleteMessage userDeleteMessage = objectMapper.readValue(userData, UserDeleteMessage.class);
+    @Override
+    public void processUserDeleting(UserEvent deleteEvent) {
         List<OrderEntity> userOrders = orderRepository
-                .findAllByStatusInAndClientEmail(List.of(Status.NOT_VERIFIED, Status.VERIFIED, Status.PREPARING), userDeleteMessage.email());
+                .findAllByStatusInAndClientEmail(List.of(Status.NOT_VERIFIED, Status.VERIFIED, Status.PREPARING), deleteEvent.email());
         List<OrderEntity> canceledOrders = userOrders.stream().peek(order -> order.setStatus(Status.CANCELLED)).toList();
         orderRepository.saveAll(canceledOrders);
-        log.info("All orders of user {} was canceled", userDeleteMessage.email());
+        log.info("All orders of user {} was canceled", deleteEvent.email());
     }
 }
