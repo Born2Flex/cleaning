@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,9 +31,9 @@ public class GlobalHandler {
         return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public RedirectView handleAccessDeniedException(AccessDeniedException e) {
-        return new RedirectView("/");
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+        return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(NoSuchEntityException.class)
@@ -41,8 +42,10 @@ public class GlobalHandler {
     }
 
     @ExceptionHandler
-    public String handleUnexpectedException(Exception e) {
-        return "unexpectedError";
+    public ResponseEntity<String> handleUnexpectedException(Exception e) {
+        log.error(e.getMessage());
+        log.error(e.getClass().toString());
+        return new ResponseEntity<>(formatMessage(e.getMessage()), getHttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private static String formatMessage(String message) {
