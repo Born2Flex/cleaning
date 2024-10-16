@@ -1,6 +1,6 @@
 FROM amazoncorretto:21
 
-ENV ACTIVEMQ_ADMIN_LOGIN=tcp://localhost:61616
+ENV ACTIVEMQ_ADMIN_URL=tcp://host.docker.internal:61616
 ENV ACTIVEMQ_ADMIN_LOGIN=admin
 ENV ACTIVEMQ_ADMIN_PASSWORD=admin
 

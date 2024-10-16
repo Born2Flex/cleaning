@@ -75,7 +75,8 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
     @Operation(summary = "Delete user", description = "Delete user")
     @DeleteMapping("/{id}")
-    public Boolean deleteAddress(@PathVariable Long id) {
+    public Boolean deleteUser(@PathVariable Long id) {
+        log.info("Delete user with id {}", id);
         return userService.deleteById(id);
     }
 }
