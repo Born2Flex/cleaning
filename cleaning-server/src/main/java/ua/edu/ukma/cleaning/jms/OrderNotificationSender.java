@@ -9,6 +9,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import ua.edu.ukma.cleaning.jms.models.OrderNotification;
 
+import java.time.LocalDateTime;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class OrderNotificationSender {
     private final ObjectMapper objectMapper;
 
     public void sendMessage(OrderNotification order){
+        order.setCreationTime(LocalDateTime.now());
         try{
             jmsTemplate.convertAndSend(queue, objectMapper.writeValueAsString(order));
         } catch(Exception e){

@@ -15,4 +15,5 @@ public class OrderNotification implements Serializable {
     private String email;
     private Long orderId;
     private LocalDateTime orderTime;
+    private LocalDateTime creationTime;
 }
