@@ -5,18 +5,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.ukma.notificationserver.jms.models.UserEvent;
+import org.ukma.notificationserver.metrics.EmailProcessingTimeMetric;
+import org.ukma.notificationserver.metrics.FailedEmailsCountMetric;
 import org.ukma.notificationserver.models.OrderNotification;
 import org.ukma.notificationserver.models.OrderNotificationType;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MailService {
     private final JavaMailSender javaMailSender;
+    private final EmailProcessingTimeMetric emailProcessingTimeMetric;
+    private final FailedEmailsCountMetric failedEmailsCountMetric;
+    private final AtomicInteger countOfFailed = new AtomicInteger(0);
 
     public void processOrderNotification(OrderNotification order) {
         if (order.getType() == OrderNotificationType.CREATION)
@@ -36,7 +45,9 @@ public class MailService {
                 + "The Spring Boot Cleaning Team");
         try {
             javaMailSender.send(mailMessage);
+            emailProcessingTimeMetric.recordExecutionTime(order.getCreationTime(), LocalDateTime.now());
         } catch (MailException e) {
+            countOfFailed.incrementAndGet();
             log.error("Can`t send email for user: {}, for order with id: {}, with error:", order.getEmail(), order.getOrderId(), e);
         }
     }
@@ -52,7 +63,9 @@ public class MailService {
                 + "The Spring Boot Cleaning Team");
         try {
             javaMailSender.send(mailMessage);
+            emailProcessingTimeMetric.recordExecutionTime(order.getCreationTime(), LocalDateTime.now());
         } catch (MailException e) {
+            countOfFailed.incrementAndGet();
             log.error("Can`t send email for user: {}, for order with id: {}, with error:", order.getEmail(), order.getOrderId(), e);
         }
     }
@@ -72,7 +85,9 @@ public class MailService {
                 """, user.name()));
         try {
             javaMailSender.send(mailMessage);
+            emailProcessingTimeMetric.recordExecutionTime(user.creationTime(), LocalDateTime.now());
         } catch (MailException e) {
+            countOfFailed.incrementAndGet();
             log.error("Can`t send email for user: {}, with error: ", user.email(), e);
         }
     }
@@ -92,8 +107,16 @@ public class MailService {
                 """, user.name()));
         try {
             javaMailSender.send(mailMessage);
+            emailProcessingTimeMetric.recordExecutionTime(user.creationTime(), LocalDateTime.now());
         } catch (MailException e) {
+            countOfFailed.incrementAndGet();
             log.error("Can`t send email for user: {}, with error: ", user.email(), e);
         }
+    }
+
+    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.MINUTES)
+    public void recordMetrics() {
+        failedEmailsCountMetric.recordFailedEmailsCount(countOfFailed.get());
+        countOfFailed.set(0);
     }
 }
