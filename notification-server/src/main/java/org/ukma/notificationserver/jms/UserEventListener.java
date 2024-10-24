@@ -1,6 +1,8 @@
 package org.ukma.notificationserver.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,11 @@ import org.ukma.notificationserver.mails.MailService;
 public class UserEventListener {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final MailService mailService;
+
+    @PostConstruct
+    void init() {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     @SneakyThrows
     @JmsListener(destination = "${user.event.topic}", containerFactory = "topicFactory")
