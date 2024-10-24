@@ -12,6 +12,7 @@ import ua.edu.ukma.cleaning.jms.models.OrderNotification;
 import ua.edu.ukma.cleaning.jms.models.OrderNotificationType;
 import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
 import ua.edu.ukma.cleaning.jms.models.UserEvent;
+import ua.edu.ukma.cleaning.metrics.OrderQuantityMetric;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 import ua.edu.ukma.cleaning.order.review.ReviewMapper;
@@ -35,6 +36,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     private final CommercialProposalRepository commercialProposalRepository;
     private final ReviewMapper reviewMapper;
     private final OrderNotificationSender notificationSender;
+    private final OrderQuantityMetric orderCounterMetric;
 
     @Override
     @Timed("order_creation_time")
@@ -50,6 +52,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
         String userEmail = SecurityContextAccessor.getAuthenticatedUser().getUsername();
         notificationSender.sendMessage(new OrderNotification(OrderNotificationType.CREATION, userEmail, entity.getId(), entity.getOrderTime()));
         log.info("Order with id = {} successfully created", entity.getId());
+        orderCounterMetric.increment();
         return orderDto;
     }
 

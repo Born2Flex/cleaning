@@ -1,18 +1,5 @@
 version: '3'
 services:
-  #cleaning_notification:
-  #image: "zeltronick/cleaning-notification:latest"
-  #container_name: "cleaning-notification"
-  #ports:
-  #- "7777:8080"
-  # links:
-  #   - cleaning_activeMq
-  #environment:
-  #ACTIVEMQ_ADMIN_URL: tcp://cleaning-activeMq:61616
-  #ACTIVEMQ_ADMIN_LOGIN: admin
-  #ACTIVEMQ_ADMIN_PASSWORD: admin
-  #depends_on:
-  #- cleaning_activeMq
 
   cleaning_db:
     image: "postgres:latest"
@@ -55,8 +42,8 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
-    ports:
-      - "9090:9090"
+    expose:
+      - 9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
@@ -68,9 +55,22 @@ services:
       - "3000:3000"
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./cleaning_dashboard.json:/etc/grafana/provisioning/dashboards/cleaning_dashboard.json
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=password
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./.htpasswd:/etc/nginx/.htpasswd:ro
+    ports:
+      - "8088:80"
+    depends_on:
+      - prometheus
 
 volumes:
   cleaning-data:
