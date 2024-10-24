@@ -1,5 +1,6 @@
 package ua.edu.ukma.cleaning.order;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     private final OrderNotificationSender notificationSender;
 
     @Override
+    @Timed("order_creation_time")
     @Transactional
     public OrderForUserDto createOrder(OrderCreationDto order) {
         OrderEntity entity = orderMapper.toEntity(order);
