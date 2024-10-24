@@ -1,0 +1,79 @@
+version: '3'
+services:
+  #cleaning_notification:
+  #image: "zeltronick/cleaning-notification:latest"
+  #container_name: "cleaning-notification"
+  #ports:
+  #- "7777:8080"
+  # links:
+  #   - cleaning_activeMq
+  #environment:
+  #ACTIVEMQ_ADMIN_URL: tcp://cleaning-activeMq:61616
+  #ACTIVEMQ_ADMIN_LOGIN: admin
+  #ACTIVEMQ_ADMIN_PASSWORD: admin
+  #depends_on:
+  #- cleaning_activeMq
+
+  cleaning_db:
+    image: "postgres:latest"
+    container_name: "cleaning-db"
+    ports:
+      - "5312:5432"
+    environment:
+      POSTGRES_USER: cleaningadmin
+      POSTGRES_PASSWORD: bestcleaning
+      POSTGRES_DB: cleaning
+    volumes:
+      - cleaning-data:/var/lib/postgres/data
+
+  cleaning_activeMq:
+    image: "apache/activemq-classic:5.18.3"
+    container_name: "cleaning-activeMq"
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+    volumes:
+      - cleaning-data:/var/activemq/data
+      - cleaning-conf:/var/activemq/conf
+
+  user_db:
+    image: "postgres:latest"
+    container_name: "user-db"
+    ports:
+      - "4126:5432"
+    environment:
+      POSTGRES_USER: userserver
+      POSTGRES_PASSWORD: 8(efQ8cx1H]q
+      POSTGRES_DB: user
+    volumes:
+      - user-data:/var/lib/postgres/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+
+volumes:
+  cleaning-data:
+  cleaning-conf:
+  user-data:
+  grafana-storage:
