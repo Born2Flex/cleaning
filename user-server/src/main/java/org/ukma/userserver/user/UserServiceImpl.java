@@ -1,7 +1,8 @@
 package org.ukma.userserver.user;
 
 
-import lombok.RequiredArgsConstructor;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +27,21 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserEventSender userEventSender;
+    private final Counter usersRegisteredCount;
+
+    public UserServiceImpl(PasswordEncoder encoder, UserRepository userRepository, UserMapper userMapper, UserEventSender userEventSender, MeterRegistry registry) {
+        this.encoder = encoder;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.userEventSender = userEventSender;
+        usersRegisteredCount = Counter.builder("user_registration_requests")
+                .register(registry);
+    }
 
     @Override
     public UserDto create(UserRegistrationDto user) {
@@ -42,6 +52,7 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = userMapper.toDto(created);
         userEventSender.sendEvent(UserEvent.createEventFrom(created));
         log.info("Created new user with id = {}", userDto.getId());
+        usersRegisteredCount.increment();
         return userDto;
     }
 
