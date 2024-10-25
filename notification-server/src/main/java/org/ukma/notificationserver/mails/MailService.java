@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.ukma.notificationserver.jms.models.UserEvent;
 import org.ukma.notificationserver.metrics.EmailProcessingTimeMetric;
@@ -15,7 +14,6 @@ import org.ukma.notificationserver.models.OrderNotificationType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -112,11 +110,5 @@ public class MailService {
             countOfFailed.incrementAndGet();
             log.error("Can`t send email for user: {}, with error: ", user.email(), e);
         }
-    }
-
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.MINUTES)
-    public void recordMetrics() {
-        failedEmailsCountMetric.recordFailedEmailsCount(countOfFailed.get());
-        countOfFailed.set(0);
     }
 }
