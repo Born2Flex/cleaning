@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: Cleaning Data Source
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: http://host.docker.internal:8088
+    basicAuth: true
+    basicAuthUser: admin
+    secureJsonData:
+      basicAuthPassword: password
+    editable: true
+    uid: "P7F20EB2442062CC1"

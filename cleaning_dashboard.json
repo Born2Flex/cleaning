@@ -38,7 +38,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "description": "The duration from event publication to ActiveMQ until the email is sent.",
       "fieldConfig": {
@@ -130,7 +130,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "description": "The count of failed email sending attempts.",
       "fieldConfig": {
@@ -193,7 +193,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "description": "The time it takes to create an order.",
       "fieldConfig": {
@@ -258,7 +258,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -363,7 +363,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -426,7 +426,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "process_uptime_seconds{application=\"$application\", instance=\"$instance\"}",
           "format": "time_series",
@@ -443,7 +443,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -512,7 +512,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "sum(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{application=\"$application\",instance=\"$instance\", area=\"heap\"})",
           "format": "time_series",
@@ -528,7 +528,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -607,7 +607,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "sum(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{application=\"$application\",instance=\"$instance\", area=\"nonheap\"})",
           "format": "time_series",
@@ -623,7 +623,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -685,7 +685,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "process_start_time_seconds{application=\"$application\", instance=\"$instance\"}*1000",
           "format": "time_series",
@@ -702,7 +702,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -790,7 +790,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "system_cpu_usage{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -801,7 +801,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "process_cpu_usage{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -816,7 +816,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -904,7 +904,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "system_load_average_1m{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -915,7 +915,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "system_cpu_count{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -943,7 +943,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {},
@@ -980,7 +980,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
@@ -991,7 +991,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_committed_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
@@ -1002,7 +1002,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_max_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
@@ -1017,7 +1017,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {},
@@ -1054,7 +1054,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_nonheap\"}",
           "format": "time_series",
@@ -1065,7 +1065,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_committed_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_nonheap\"}",
           "format": "time_series",
@@ -1076,7 +1076,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_memory_max_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_nonheap\"}",
           "format": "time_series",
@@ -1104,7 +1104,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1191,7 +1191,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_threads_daemon_threads{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -1202,7 +1202,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_threads_live_threads{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -1213,7 +1213,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_threads_peak_threads{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -1228,7 +1228,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1310,7 +1310,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(jvm_gc_memory_allocated_bytes_total{instance=\"$instance\", application=\"$application\"}[5m])",
           "format": "time_series",
@@ -1321,7 +1321,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(jvm_gc_memory_promoted_bytes_total{instance=\"$instance\", application=\"$application\"}[5m])",
           "format": "time_series",
@@ -1336,7 +1336,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1424,7 +1424,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_classes_loaded_classes{instance=\"$instance\", application=\"$application\"}",
           "format": "time_series",
@@ -1439,7 +1439,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1521,7 +1521,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(jvm_classes_unloaded_classes_total{instance=\"$instance\", application=\"$application\"}[5m])",
           "format": "time_series",
@@ -1536,7 +1536,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1618,7 +1618,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_buffer_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"direct\"}",
           "format": "time_series",
@@ -1629,7 +1629,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_buffer_total_capacity_bytes{instance=\"$instance\", application=\"$application\", id=\"direct\"}",
           "format": "time_series",
@@ -1644,7 +1644,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1726,7 +1726,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_buffer_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"mapped\"}",
           "format": "time_series",
@@ -1737,7 +1737,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "jvm_buffer_total_capacity_bytes{instance=\"$instance\", application=\"$application\", id=\"mapped\"}",
           "format": "time_series",
@@ -1765,7 +1765,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -1893,7 +1893,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(jvm_gc_pause_seconds_count{instance=\"$instance\", application=\"$application\"}[5m])",
           "format": "time_series",
@@ -1908,7 +1908,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2036,7 +2036,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(jvm_gc_pause_seconds_sum{instance=\"$instance\", application=\"$application\"}[5m])",
           "format": "time_series",
@@ -2064,7 +2064,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2125,7 +2125,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2140,7 +2140,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2248,7 +2248,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_active{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2259,7 +2259,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_idle{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2270,7 +2270,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_pending{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2285,7 +2285,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2346,7 +2346,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_timeout_total{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2361,7 +2361,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2443,7 +2443,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_creation_seconds_sum{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"} / hikaricp_connections_creation_seconds_count{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2458,7 +2458,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2540,7 +2540,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_usage_seconds_sum{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"} / hikaricp_connections_usage_seconds_count{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2555,7 +2555,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -2637,7 +2637,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "hikaricp_connections_acquire_seconds_sum{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"} / hikaricp_connections_acquire_seconds_count{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\"}",
           "format": "time_series",
@@ -2662,7 +2662,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -2723,7 +2723,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_config_min{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -2738,7 +2738,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -2854,7 +2854,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\", status=~\"5..\"}[1m]))",
               "format": "time_series",
@@ -2865,7 +2865,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\", status=~\"4..\"}[1m]))",
               "format": "time_series",
@@ -2876,7 +2876,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\", status=~\"2..\"}[1m]))",
               "format": "time_series",
@@ -2887,7 +2887,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\", status=~\"3..\"}[1m]))",
               "format": "time_series",
@@ -2902,7 +2902,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -2963,7 +2963,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_config_max{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -2978,7 +2978,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -3060,7 +3060,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\"}[1m]))",
               "format": "time_series",
@@ -3076,7 +3076,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -3161,7 +3161,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "sum(rate(http_server_requests_seconds_sum{application=\"$application\", instance=\"$instance\", status!~\"5..\"}[1m]))/sum(rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\", status!~\"5..\"}[1m]))",
               "format": "time_series",
@@ -3173,7 +3173,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "max(http_server_requests_seconds_max{application=\"$application\", instance=\"$instance\", status!~\"5..\"})",
               "format": "time_series",
@@ -3189,7 +3189,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -3276,7 +3276,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "topk(10, sum by(uri, method) (rate(http_server_requests_seconds_count{application=\"$application\", instance=\"$instance\"}[1m])))",
               "format": "time_series",
@@ -3291,7 +3291,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "fieldConfig": {
             "defaults": {
@@ -3378,7 +3378,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_current{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -3389,7 +3389,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_busy{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -3400,7 +3400,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_idle{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -3411,7 +3411,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "ce1vrll79pfk0a"
+                "uid": "P7F20EB2442062CC1"
               },
               "expr": "jetty_threads_jobs{instance=\"$instance\", application=\"$application\"}",
               "format": "time_series",
@@ -3443,7 +3443,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -3532,7 +3532,7 @@
           "alias": "",
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(logback_events_total{instance=\"$instance\", application=\"$application\", level=\"info\"}[5m])",
           "format": "time_series",
@@ -3548,7 +3548,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -3637,7 +3637,7 @@
           "alias": "",
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(logback_events_total{instance=\"$instance\", application=\"$application\", level=\"error\"}[5m])",
           "format": "time_series",
@@ -3653,7 +3653,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -3742,7 +3742,7 @@
           "alias": "",
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(logback_events_total{instance=\"$instance\", application=\"$application\", level=\"warn\"}[5m])",
           "format": "time_series",
@@ -3758,7 +3758,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -3847,7 +3847,7 @@
           "alias": "",
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(logback_events_total{instance=\"$instance\", application=\"$application\", level=\"debug\"}[5m])",
           "format": "time_series",
@@ -3863,7 +3863,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "ce1vrll79pfk0a"
+        "uid": "P7F20EB2442062CC1"
       },
       "fieldConfig": {
         "defaults": {
@@ -3952,7 +3952,7 @@
           "alias": "",
           "datasource": {
             "type": "prometheus",
-            "uid": "ce1vrll79pfk0a"
+            "uid": "P7F20EB2442062CC1"
           },
           "expr": "irate(logback_events_total{instance=\"$instance\", application=\"$application\", level=\"trace\"}[5m])",
           "format": "time_series",
@@ -3980,7 +3980,7 @@
           "text": "Cleaning Server",
           "value": "Cleaning Server"
         },
-        "datasource": "ce1vrll79pfk0a",
+        "datasource": "P7F20EB2442062CC1",
         "definition": "label_values(application)",
         "includeAll": false,
         "label": "Application",
@@ -3997,7 +3997,7 @@
           "text": "host.docker.internal:8081",
           "value": "host.docker.internal:8081"
         },
-        "datasource": "ce1vrll79pfk0a",
+        "datasource": "Cleaning Data Source",
         "definition": "label_values(jvm_classes_loaded_classes{application=\"$application\"}, instance)",
         "includeAll": false,
         "label": "Instance",
@@ -4014,7 +4014,7 @@
           "text": "HikariPool-1",
           "value": "HikariPool-1"
         },
-        "datasource": "ce1vrll79pfk0a",
+        "datasource": "Cleaning Data Source",
         "definition": "",
         "includeAll": false,
         "label": "HikariCP-Pool",
@@ -4031,7 +4031,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "ce1vrll79pfk0a",
+        "datasource": "Cleaning Data Source",
         "definition": "",
         "includeAll": true,
         "label": "Memory Pool (heap)",
@@ -4048,7 +4048,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "ce1vrll79pfk0a",
+        "datasource": "Cleaning Data Source",
         "definition": "",
         "includeAll": true,
         "label": "Memory Pool (nonheap)",
@@ -4069,7 +4069,7 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Spring Boot Cleaning Application",
-  "uid": "cleaning-app",
+  "uid": "cleaning-app-v2-3",
   "version": 1,
   "weekStart": "monday"
 }
