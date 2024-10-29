@@ -1,0 +1,20 @@
+server:
+    port: 9090
+spring:
+    application:
+        name: cleaning-gateway
+    cloud:
+        gateway:
+            routes:
+                - id: cleaning_server
+                  uri: http://localhost:8081
+                  predicates:
+                      - Path=/cleaning/**
+                  filters:
+                      - RewritePath=/cleaning/(?<segment>.*), /api/${segment}
+                - id: user_server
+                  uri: http://localhost:1177
+                  predicates:
+                      - Path=/account/**
+                  filters:
+                      - RewritePath=/account/(?<segment>.*), /api/${segment}
