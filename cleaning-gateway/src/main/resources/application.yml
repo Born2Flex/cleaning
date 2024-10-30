@@ -13,8 +13,19 @@ spring:
                   filters:
                       - RewritePath=/cleaning/(?<segment>.*), /api/${segment}
                 - id: user_server
-                  uri: http://localhost:1177
+                  uri: lb://USER-SERVER
                   predicates:
                       - Path=/account/**
                   filters:
                       - RewritePath=/account/(?<segment>.*), /api/${segment}
+            httpserver:
+              wiretap: true
+logging:
+  level:
+    org.springframework.web.HttpLogging: TRACE
+    reactor.netty.http.server: DEBUG
+    reactor.netty.http.client: DEBUG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8088/eureka/
