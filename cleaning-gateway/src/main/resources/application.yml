@@ -7,7 +7,7 @@ spring:
         gateway:
             routes:
                 - id: cleaning_server
-                  uri: http://localhost:8081
+                  uri: lb://CLEANING
                   predicates:
                       - Path=/cleaning/**
                   filters:
