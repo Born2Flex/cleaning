@@ -10,6 +10,7 @@ import ua.edu.ukma.cleaning.order.Status;
 import ua.edu.ukma.cleaning.storage.ResourceWithType;
 import ua.edu.ukma.cleaning.storage.StorageService;
 import ua.edu.ukma.cleaning.user.UserServerClient;
+import ua.edu.ukma.cleaning.user.UserServerClientFeign;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
 import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
@@ -27,7 +28,10 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final EmploymentMapper employmentMapper;
     private final OrderRepository orderRepository;
     private final StorageService storageService;
+
     private final UserServerClient userServerClient;
+
+    private final UserServerClientFeign userServerClientFeign;
 
     @Override
     public EmploymentDto create(MultipartFile resumeFile) {
@@ -47,7 +51,9 @@ public class EmploymentServiceImpl implements EmploymentService {
     @Transactional
     @Override
     public Boolean succeed(Long userId) {
-        UserDto user = userServerClient.getById(userId);
+        //TODO implement user role change functionality
+//        UserDto user = userServerClient.getById(userId);
+        UserDto user = userServerClientFeign.getById(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
         repository.delete(employmentRequest);
         log.debug("Admin id = {} accepted Employment request id = {}",

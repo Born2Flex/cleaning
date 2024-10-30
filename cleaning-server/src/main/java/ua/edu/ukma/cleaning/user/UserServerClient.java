@@ -71,12 +71,16 @@ public class UserServerClient {
     }
 
     private void login() {
+        authToken = getJWTToken();
+    }
+
+    public String getJWTToken() {
         AuthRequest authRequest = new AuthRequest(username, password);
-        JwtResponse response = restClient.method(HttpMethod.POST)
+        JwtResponse response =  restClient.method(HttpMethod.POST)
                 .uri("/api/auth/login")
                 .body(authRequest)
                 .retrieve()
                 .toEntity(JwtResponse.class).getBody();
-        authToken = response.getAccessToken();
+        return "Bearer " + response.getAccessToken();
     }
 }
