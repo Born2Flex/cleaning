@@ -1,0 +1,10 @@
+server:
+    port: 9000
+spring:
+    application:
+        name: config-server
+    cloud:
+      config:
+        server:
+          git:
+              uri: https://github.com/Born2Flex/config-server-repo.git
