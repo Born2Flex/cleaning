@@ -22,7 +22,12 @@ public class JwtAuthInterceptor implements ServerInterceptor {
         String authHeader = headers.get(AUTHORIZATION_METADATA_KEY);
         String token = null;
         AuthenticatedUser user = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            call.close(Status.UNAUTHENTICATED.withDescription("Invalid or missing JWT token"), headers);
+            log.info("No token!");
+            return new ServerCall.Listener<>() {};
+        }
+        else if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
                 user = jwtService.extractUser(token);
