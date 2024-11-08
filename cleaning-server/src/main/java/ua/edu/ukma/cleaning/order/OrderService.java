@@ -4,6 +4,8 @@ import org.springframework.data.domain.Pageable;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 
+import java.util.List;
+
 public interface OrderService {
     OrderForUserDto createOrder(OrderCreationDto order);
     OrderForUserDto updateOrderForUser(OrderForUserDto order);
@@ -18,4 +20,5 @@ public interface OrderService {
     OrderPageDto findOrdersByExecutorId(Long id, Pageable pageable);
     OrderPageDto findOrdersByUserEmail(String email, Pageable pageable);
     OrderListDto changeOrderStatus(Long orderId, Status status);
+    List<OrderListDto> getUpcomingOrders();
 }

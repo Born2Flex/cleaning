@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.user;
+package org.ukma.notificationserver.user;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import ua.edu.ukma.cleaning.security.JwtService;
-import ua.edu.ukma.cleaning.user.dto.UserDto;
-import ua.edu.ukma.cleaning.user.dto.UserListDto;
+import org.ukma.notificationserver.security.JwtService;
+import org.ukma.notificationserver.user.dto.UserDto;
+import org.ukma.notificationserver.user.dto.UserListDto;
 
 import java.util.List;
 
