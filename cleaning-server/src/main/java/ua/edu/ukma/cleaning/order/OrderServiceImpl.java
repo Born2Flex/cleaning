@@ -229,7 +229,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     }
 
     public List<OrderListDto> getUpcomingOrders() {
-        List<OrderEntity> orders = orderRepository.findAllByOrderTimeBetweenAndStatusNot(
+        List<OrderEntity> orders = orderRepository.findAllByOrderTimeBetweenAndStatus(
             LocalDate.now().atStartOfDay(),
             LocalDate.now().atStartOfDay().plusDays(1),
             Status.PREPARING

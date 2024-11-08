@@ -16,7 +16,9 @@ public class OrderListDto {
     private Long id;
     private Double price;
     private LocalDateTime orderTime;
+    private LocalDateTime creationTime;
     private AddressDto address;
     private Status status;
     private ReviewDto review;
+    private String clientEmail;
 }
