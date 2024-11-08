@@ -4,5 +4,6 @@ public enum Role {
     USER,
     EMPLOYEE,
     ADMIN,
-    CLEANING_SERVER
+    CLEANING_SERVER,
+    NOTIFICATION_SERVER
 }

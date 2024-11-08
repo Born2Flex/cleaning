@@ -25,7 +25,7 @@ public class GrpcNotificationServiceClient {
     private final MailService mailService;
     private final OrderNotificationMapper orderNotificationMapper;
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 8 * * *")
     public void getUpcomingOrderNotifications() {
         getUpcomingOrderNotifications(0);
     }

@@ -20,11 +20,10 @@ public class GrpcNotificationService extends NotificationServiceGrpc.Notificatio
     private final OrderService orderService;
     private final NotificationResponseMapper notificationResponseMapper;
 
-    @PreAuthorize("hasAuthority('ROLE_CLEANING_SERVER')")
+    @PreAuthorize("hasAuthority('ROLE_NOTIFICATION_SERVER')")
     @Override
     public void getUpcomingOrderNotifications(Empty request, StreamObserver<NotificationResponse> responseObserver) {
         List<OrderListDto> orders = orderService.getUpcomingOrders();
-        log.info("orders length: {}", orders.size());
         for(OrderListDto order : orders) {
             NotificationResponse response = notificationResponseMapper.toNotificationResponse(order);
             responseObserver.onNext(response);
