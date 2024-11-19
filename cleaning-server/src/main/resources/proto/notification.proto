@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package notification;
+
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service NotificationService {
+  rpc getUpcomingOrderNotifications (google.protobuf.Empty) returns (stream NotificationResponse);
+}
+
+message NotificationResponse {
+  enum OrderNotificationType {
+      CREATION = 0;
+      REMINDING = 1;
+  }
+
+  OrderNotificationType type = 1;
+  string email = 2;
+  int64 orderId = 3;
+  google.protobuf.Timestamp orderTime = 4;
+  google.protobuf.Timestamp creationTime = 5;
+}
