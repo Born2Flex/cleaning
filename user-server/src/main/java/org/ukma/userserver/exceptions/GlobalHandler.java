@@ -10,7 +10,6 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.stream.Collectors;
 
@@ -49,11 +48,9 @@ public class GlobalHandler {
     }
 
     private static String formatMessage(String message) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"errorMessage\":\"")
-                .append(message)
-                .append("\"}");
-        return sb.toString();
+        return "{\"errorMessage\":\"" +
+                message +
+                "\"}";
     }
 
     private static HttpHeaders getHttpHeaders() {

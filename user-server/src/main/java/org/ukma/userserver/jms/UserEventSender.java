@@ -3,7 +3,6 @@ package org.ukma.userserver.jms;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class UserEventSender {
-    @Autowired
-    JmsTemplate jmsTemplate;
+    private final JmsTemplate jmsTemplate;
 
     @Value("${user.event.topic}")
     private String topic;

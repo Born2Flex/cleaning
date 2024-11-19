@@ -2,8 +2,6 @@ package org.ukma.userserver.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.ukma.userserver.exceptions.AccessDeniedException;
 import org.ukma.userserver.exceptions.CantRefreshTokenException;
 import org.ukma.userserver.security.dto.AuthRequest;
 import org.ukma.userserver.security.dto.JwtResponse;
@@ -38,13 +37,11 @@ public class AuthenticationController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<JwtResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            return new ResponseEntity<>("{\"errors\":\"Invalid username or password!\"}", headers, HttpStatus.UNAUTHORIZED);
+            throw new AccessDeniedException("Invalid username or password");
         }
         UserEntity user = (UserEntity) service.loadUserByUsername(authRequest.getUsername());
         String token = jwtService.generateToken(user.getEmail(), user.getRole(), user.getId());

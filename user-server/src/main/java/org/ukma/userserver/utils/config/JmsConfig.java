@@ -17,8 +17,8 @@ public class JmsConfig {
             @Override
             public Destination resolveDestinationName(@Nullable Session session, String destinationName,
                                                       boolean pubSubDomain) throws JMSException {
-                pubSubDomain = destinationName.endsWith("topic");
-                return super.resolveDestinationName(session, destinationName, pubSubDomain);
+                boolean isPubSubDomain = destinationName.endsWith("topic");
+                return super.resolveDestinationName(session, destinationName, isPubSubDomain);
             }
         };
     }

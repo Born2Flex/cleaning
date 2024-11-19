@@ -21,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.ukma.userserver.address.AddressEntity;
 import org.ukma.userserver.user.models.Role;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,7 +32,10 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
-public class UserEntity implements UserDetails {
+public class UserEntity implements UserDetails, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1905122041950251207L;
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +67,7 @@ public class UserEntity implements UserDetails {
 
     @ToStringExclude
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<AddressEntity> addressList;
+    private transient List<AddressEntity> addressList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
