@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import org.ukma.notificationserver.jms.models.UserEvent;
+import org.ukma.notificationserver.jms.models.UserEventType;
 import org.ukma.notificationserver.mails.MailService;
+
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -27,9 +30,10 @@ public class UserEventListener {
     @JmsListener(destination = "${user.event.topic}", containerFactory = "topicFactory")
     public void topicListener(String userEventMessage) {
         UserEvent userEvent = objectMapper.readValue(userEventMessage, UserEvent.class);
-        switch (userEvent.type()) {
-            case CREATE -> mailService.sendUserCreateEmail(userEvent);
-            case DELETE -> mailService.sendUserDeletionEmail(userEvent);
+        if (Objects.requireNonNull(userEvent.type()) == UserEventType.CREATE) {
+            mailService.sendUserCreateEmail(userEvent);
+        } else if (userEvent.type() == UserEventType.DELETE) {
+            mailService.sendUserDeletionEmail(userEvent);
         }
         log.info("Received {}", userEvent);
     }

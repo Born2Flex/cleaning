@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                 .authenticated())
             .formLogin(formLogin -> formLogin.loginPage(this.adminServer.getContextPath() + "/login")
                 .successHandler(successHandler))
-            .logout((logout) -> logout.logoutUrl(this.adminServer.getContextPath() + "/logout"))
+            .logout(logout -> logout.logoutUrl(this.adminServer.getContextPath() + "/logout"))
             .httpBasic(Customizer.withDefaults())
             .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringRequestMatchers(
