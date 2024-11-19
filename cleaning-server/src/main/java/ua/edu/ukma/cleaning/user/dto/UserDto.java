@@ -24,7 +24,7 @@ public class UserDto {
     private String email;
     @NotNull(message = "Role cannot be null")
     private Role role;
-    @Pattern(regexp = "^((\\+38\\s?)?((\\(0[1-9]{2}\\))|(0[1-9]{2}))[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2})?$",
+    @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
             message = "Phone number should be correct")
     private String phoneNumber;
     private List<AddressDto> addressList;

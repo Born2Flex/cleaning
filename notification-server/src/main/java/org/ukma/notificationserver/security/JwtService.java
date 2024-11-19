@@ -20,8 +20,8 @@ public class JwtService {
     public String secret;
 
     private class JWTClaims {
-        public static String ROLE_CLAIM = "role";
-        public static String ID_CLAIM = "id";
+        public static final String ROLE_CLAIM = "role";
+        public static final String ID_CLAIM = "id";
     }
 
     private Key getSignKey() {

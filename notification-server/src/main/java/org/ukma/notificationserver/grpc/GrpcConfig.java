@@ -1,7 +1,6 @@
 package org.ukma.notificationserver.grpc;
 
 import io.grpc.ClientInterceptor;
-import io.grpc.ServerInterceptor;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.interceptor.GrpcGlobalClientInterceptor;
 import org.springframework.context.annotation.Bean;

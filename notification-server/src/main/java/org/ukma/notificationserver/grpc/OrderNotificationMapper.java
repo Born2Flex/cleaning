@@ -5,9 +5,6 @@ import org.mapstruct.*;
 import org.ukma.notificationserver.models.OrderNotification;
 import org.ukma.notificationserver.models.OrderNotificationType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = TimestampMapper.class)
 public interface OrderNotificationMapper {
 

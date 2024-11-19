@@ -12,6 +12,8 @@ import org.springframework.web.client.RestClient;
 import org.ukma.notificationserver.security.JwtService;
 import org.ukma.notificationserver.user.dto.UserDto;
 import org.ukma.notificationserver.user.dto.UserListDto;
+import org.ukma.notificationserver.utils.exeptions.ClientRequestException;
+import org.ukma.notificationserver.utils.exeptions.InvalidResponseException;
 
 import java.util.List;
 
@@ -40,18 +42,6 @@ public class UserServerClient {
         restClient = RestClient.create(userServerUrl);
     }
 
-    public UserDto getById(Long id) {
-        return makeApiRequest("/api/users/" + id, HttpMethod.GET, null, UserDto.class).getBody();
-    }
-
-    public void updateUser(UserDto userDto) {
-        makeApiRequest("/api/users", HttpMethod.PUT, userDto, Object.class);
-    }
-
-    public List<UserListDto> getAllByRole(Role role) {
-        return ((List<UserListDto>) makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, "", List.class).getBody());
-    }
-
     public <T> ResponseEntity<T> makeApiRequest(String endpoint, HttpMethod method, Object requestBody, Class<T> responseType) {
         if (authToken == null || jwtService.isTokenExpired(authToken)) {
             login();
@@ -66,7 +56,7 @@ public class UserServerClient {
                     .toEntity(responseType);
         } catch (Exception e) {
             log.error("Error making request", e);
-            throw new RuntimeException(e);
+            throw new ClientRequestException("Error making request", e);
         }
     }
 
@@ -81,6 +71,8 @@ public class UserServerClient {
                 .body(authRequest)
                 .retrieve()
                 .toEntity(JwtResponse.class).getBody();
+        if (response == null)
+            throw new InvalidResponseException();
         return BEARER_PREFIX + response.getAccessToken();
     }
 }

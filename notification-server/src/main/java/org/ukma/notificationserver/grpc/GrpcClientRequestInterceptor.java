@@ -12,18 +12,18 @@ public class GrpcClientRequestInterceptor implements ClientInterceptor  {
     private final UserServerClient userServerClient;
     private final JwtService jwtService;
 
-    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-            final MethodDescriptor<ReqT, RespT> methodDescriptor,
+    public <T, V> ClientCall<T, V> interceptCall(
+            final MethodDescriptor<T, V> methodDescriptor,
             final CallOptions callOptions,
             final Channel channel) {
 
-        return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
+        return new ForwardingClientCall.SimpleForwardingClientCall<T, V>(
                 channel.newCall(methodDescriptor, callOptions)) {
 
             private String token;
 
             @Override
-            public void start(ClientCall.Listener<RespT> responseListener, Metadata headers) {
+            public void start(ClientCall.Listener<V> responseListener, Metadata headers) {
                 if(token == null || jwtService.isTokenExpired(token)) {
                     token = userServerClient.getJWTToken();
                 }

@@ -3,7 +3,6 @@ package ua.edu.ukma.cleaning.order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ua.edu.ukma.cleaning.order.dto.OrderListDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

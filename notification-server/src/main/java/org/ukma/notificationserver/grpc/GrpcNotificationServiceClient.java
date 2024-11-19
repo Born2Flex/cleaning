@@ -21,7 +21,7 @@ public class GrpcNotificationServiceClient {
 
     @GrpcClient("notification-service")
     NotificationServiceGrpc.NotificationServiceStub notificationServiceStub;
-    private final int MAX_RETRIES = 3;
+    private static final int MAX_RETRIES = 3;
     private final MailService mailService;
     private final OrderNotificationMapper orderNotificationMapper;
 
