@@ -12,6 +12,8 @@ import org.springframework.web.client.RestClient;
 import ua.edu.ukma.cleaning.security.JwtService;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.ClientRequestException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.InvalidResponseException;
 
 import java.util.List;
 
@@ -49,7 +51,7 @@ public class UserServerClient {
     }
 
     public List<UserListDto> getAllByRole(Role role) {
-        return ((List<UserListDto>) makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, "", List.class).getBody());
+        return makeApiRequest("/api/users/by-role/" + role, HttpMethod.GET, "", List.class).getBody();
     }
 
     public <T> ResponseEntity<T> makeApiRequest(String endpoint, HttpMethod method, Object requestBody, Class<T> responseType) {
@@ -66,7 +68,7 @@ public class UserServerClient {
                     .toEntity(responseType);
         } catch (Exception e) {
             log.error("Error making request", e);
-            throw new RuntimeException(e);
+            throw new ClientRequestException("Error making request", e);
         }
     }
 
@@ -81,6 +83,8 @@ public class UserServerClient {
                 .body(authRequest)
                 .retrieve()
                 .toEntity(JwtResponse.class).getBody();
-        return "Bearer " + response.getAccessToken();
+        if (response == null)
+            throw new InvalidResponseException();
+        return BEARER_PREFIX + response.getAccessToken();
     }
 }

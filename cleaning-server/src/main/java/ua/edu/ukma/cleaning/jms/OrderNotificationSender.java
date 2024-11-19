@@ -3,7 +3,6 @@ package ua.edu.ukma.cleaning.jms;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 public class OrderNotificationSender {
-    @Autowired
-    JmsTemplate jmsTemplate;
+    private final JmsTemplate jmsTemplate;
 
     @Value("${order.notification.queue}")
     private String queue;

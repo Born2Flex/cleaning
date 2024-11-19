@@ -1,8 +1,12 @@
-package ua.edu.ukma.cleaning.utils.exceptionHandler;
+package ua.edu.ukma.cleaning.utils.exception.handler;
 
 
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.*;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.AccessDeniedException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.AlreadyAppliedException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.CantChangeEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.ProposalNameDuplicateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -50,11 +54,7 @@ public class GlobalHandler {
     }
 
     private static String formatMessage(String message) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"errorMessage\":\"")
-                .append(message)
-                .append("\"}");
-        return sb.toString();
+        return "{\"errorMessage\":\"" + message + "\"}";
     }
 
     private static HttpHeaders getHttpHeaders() {

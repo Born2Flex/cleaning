@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.utils.exceptionHandler.dto;
+package ua.edu.ukma.cleaning.utils.exception.handler.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

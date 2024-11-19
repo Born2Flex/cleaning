@@ -10,16 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.edu.ukma.cleaning.jms.OrderNotificationSender;
 import ua.edu.ukma.cleaning.jms.models.OrderNotification;
 import ua.edu.ukma.cleaning.jms.models.OrderNotificationType;
-import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalRepository;
+import ua.edu.ukma.cleaning.commercial.proposal.CommercialProposalRepository;
 import ua.edu.ukma.cleaning.jms.models.UserEvent;
 import ua.edu.ukma.cleaning.metrics.OrderQuantityMetric;
 import ua.edu.ukma.cleaning.order.dto.*;
 import ua.edu.ukma.cleaning.order.review.ReviewDto;
 import ua.edu.ukma.cleaning.order.review.ReviewMapper;
 import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AccessDeniedException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.AccessDeniedException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.CantChangeEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
 import java.util.List;
@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
+    private static final String DEFAULT_NO_SUCH_ENTITY_MESSAGE = "Can`t find order by id: ";
+    
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CommercialProposalRepository commercialProposalRepository;
@@ -59,12 +61,12 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForUserDto updateOrderForUser(OrderForUserDto order) {
         OrderEntity entity = orderRepository.findById(order.getId()).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + order.getId())
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + order.getId())
         );
         if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to update order of user id = {}",
                     entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         if (entity.getStatus().ordinal() >= Status.PREPARING.ordinal()) {
             log.info("User id = {} trying to change order status, when status is {}",
@@ -83,7 +85,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForAdminDto updateOrderForAdmin(OrderForAdminDto order) {
         OrderEntity entity = orderRepository.findById(order.getId()).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + order.getId())
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + order.getId())
         );
         orderMapper.updateFields(entity, order);
         OrderForAdminDto orderDto = orderMapper.toAdminDto(orderRepository.save(entity));
@@ -95,12 +97,12 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForUserDto updateReview(ReviewDto review) {
         OrderEntity entity = orderRepository.findById(review.getOrderId()).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + review.getOrderId())
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + review.getOrderId())
         );
         if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to update order of user id = {}",
                     entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         if (entity.getStatus() != Status.DONE) {
             throw new CantChangeEntityException("You can`t add review when status isn`t Done`");
@@ -115,12 +117,12 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForUserDto getOrderByIdForUser(Long id) {
         OrderEntity entity = orderRepository.findById(id).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + id)
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + id)
         );
         if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to get order of user id = {}",
                     entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         return orderMapper.toUserDto(entity);
     }
@@ -128,7 +130,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForAdminDto getOrderByIdForAdmin(Long id) {
         OrderEntity entity = orderRepository.findById(id).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + id)
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + id)
         );
         return orderMapper.toAdminDto(entity);
     }
@@ -136,11 +138,11 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public OrderForUserDto getOrderByIdForEmployee(Long id) {
         OrderEntity entity = orderRepository.findById(id).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + id)
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + id)
         );
         if (!entity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUserId())) {
             log.warn("Employee id = {} trying to get order id = {}", SecurityContextAccessor.getAuthenticatedUserId(), id);
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         return orderMapper.toUserDto(entity);
     }
@@ -148,12 +150,12 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     @Override
     public Boolean cancelOrderById(Long orderId) {
         OrderEntity entity = orderRepository.findById(orderId).orElseThrow(() ->
-                new NoSuchEntityException("Can`t find order by id: " + orderId)
+                new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + orderId)
         );
         if (!Objects.equals(entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername())) {
             log.warn("User id = {} trying to cancel order of user id = {}",
                     entity.getClientEmail(), SecurityContextAccessor.getAuthenticatedUser().getUsername());
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         entity.setStatus(Status.CANCELLED);
         orderRepository.save(entity);
@@ -181,7 +183,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
                 && !Objects.equals(SecurityContextAccessor.getAuthenticatedUserId(), id)) {
             log.warn("Employee id = {} trying to get orders of employee id = {}",
                     SecurityContextAccessor.getAuthenticatedUserId(), id);
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         Page<OrderEntity> orders = orderRepository.findOrdersByExecutorsContains(id, pageable);
         int totalPages = orders.getTotalPages();
@@ -194,7 +196,7 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
                 && !Objects.equals(SecurityContextAccessor.getAuthenticatedUser().getUsername(), email)) {
             log.warn("User id = {} trying to get orders of user id = {}",
                     SecurityContextAccessor.getAuthenticatedUserId(), email);
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         Page<OrderEntity> orders = orderRepository.findOrdersByClientEmail(email, pageable);
         int totalPages = orders.getTotalPages();
@@ -206,13 +208,13 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
         OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(() -> {
             log.warn("User {}, try to change status of order {}, but order with this id not found",
                     SecurityContextAccessor.getAuthenticatedUser(), orderId);
-            return new NoSuchEntityException("Can`t find order by id: " + orderId);
+            return new NoSuchEntityException(DEFAULT_NO_SUCH_ENTITY_MESSAGE + orderId);
         });
         if (!orderEntity.getExecutors().contains(SecurityContextAccessor.getAuthenticatedUserId())
                 && SecurityContextAccessor.getAuthenticatedUser().getRole() != Role.ADMIN) {
             log.warn("User id = {} trying to get change order by id id = {}",
                     SecurityContextAccessor.getAuthenticatedUserId(), orderEntity.getId());
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException();
         }
         orderEntity.setStatus(status);
         return orderMapper.toListDto(orderRepository.save(orderEntity));
@@ -222,8 +224,8 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
     public void processUserDeleting(UserEvent deleteEvent) {
         List<OrderEntity> userOrders = orderRepository
                 .findAllByStatusInAndClientEmail(List.of(Status.NOT_VERIFIED, Status.VERIFIED, Status.PREPARING), deleteEvent.email());
-        List<OrderEntity> canceledOrders = userOrders.stream().peek(order -> order.setStatus(Status.CANCELLED)).toList();
-        orderRepository.saveAll(canceledOrders);
+        userOrders.forEach(order -> order.setStatus(Status.CANCELLED));
+        orderRepository.saveAll(userOrders);
         log.info("All orders of user {} was canceled", deleteEvent.email());
     }
 }

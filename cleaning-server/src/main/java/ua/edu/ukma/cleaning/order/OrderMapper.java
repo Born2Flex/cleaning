@@ -1,7 +1,7 @@
 package ua.edu.ukma.cleaning.order;
 
 import org.mapstruct.*;
-import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
+import ua.edu.ukma.cleaning.commercial.proposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.dto.OrderCreationDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForAdminDto;
 import ua.edu.ukma.cleaning.order.dto.OrderForUserDto;
@@ -13,30 +13,24 @@ import java.util.Map;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface OrderMapper {
-    @Mappings({
-            @Mapping(target = "creationTime", expression = "java(java.time.LocalDateTime.now())"),
-            @Mapping(target = "status", expression = "java(ua.edu.ukma.cleaning.order.Status.NOT_VERIFIED)")
-    })
+    @Mapping(target = "creationTime", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "status", expression = "java(ua.edu.ukma.cleaning.order.Status.NOT_VERIFIED)")
     OrderEntity toEntity(OrderCreationDto order);
 
-    @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "commercialProposals", ignore = true),
-            @Mapping(target = "price", ignore = true),
-            @Mapping(target = "orderTime", ignore = true),
-            @Mapping(target = "address", ignore = true),
-            @Mapping(target = "review", ignore = true),
-    })
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "commercialProposals", ignore = true)
+    @Mapping(target = "price", ignore = true)
+    @Mapping(target = "orderTime", ignore = true)
+    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "review", ignore = true)
     void updateFields(@MappingTarget OrderEntity entity, OrderForAdminDto order);
 
-    @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "price", ignore = true),
-            @Mapping(target = "address", ignore = true),
-            @Mapping(target = "duration", ignore = true),
-            @Mapping(target = "commercialProposals", ignore = true),
-            @Mapping(target = "status", expression = "java(ua.edu.ukma.cleaning.order.Status.NOT_VERIFIED)")
-    })
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "price", ignore = true)
+    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "duration", ignore = true)
+    @Mapping(target = "commercialProposals", ignore = true)
+    @Mapping(target = "status", expression = "java(ua.edu.ukma.cleaning.order.Status.NOT_VERIFIED)")
     void updateFields(@MappingTarget OrderEntity entity, OrderForUserDto order);
 
     @Mapping(target = "commercialProposals", source = "commercialProposals", qualifiedByName = "mapCommercialProposals")

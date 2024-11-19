@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions;
+package ua.edu.ukma.cleaning.utils.exception.handler.exceptions;
 
 public class NoSuchEntityException extends RuntimeException {
     public NoSuchEntityException(String message) {

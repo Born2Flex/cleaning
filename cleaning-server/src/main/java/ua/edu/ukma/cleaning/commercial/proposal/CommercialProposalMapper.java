@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.commercialProposal;
+package ua.edu.ukma.cleaning.commercial.proposal;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

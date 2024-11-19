@@ -5,8 +5,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import ua.edu.ukma.cleaning.order.dto.OrderForUserDto;
 
-import java.util.Map;
-
 public interface ReviewService {
 
     OrderForUserDto createReview(ReviewDto reviewDto);

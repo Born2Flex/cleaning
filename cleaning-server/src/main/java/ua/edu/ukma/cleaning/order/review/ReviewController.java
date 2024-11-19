@@ -31,11 +31,11 @@ public class ReviewController {
 
     @Operation(summary = "Create review with image for order", description = "Create review with image for order")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    @PostMapping(value = "/{id}/with-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<OrderForUserDto> createReview(@Valid @RequestPart(value = "review", required = true) ReviewDto review,
+    @PostMapping(value = "/with-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<OrderForUserDto> createReview(@Valid @RequestPart(value = "review") ReviewDto review,
                                                @RequestPart(value = "image", required = false) MultipartFile imageFile) {
         if (imageFile != null && imageFile.getContentType() != null) {
-            if (!imageFile.getContentType().equals(MediaType.IMAGE_JPEG_VALUE)) {
+            if (!MediaType.IMAGE_JPEG_VALUE.equals(imageFile.getContentType())) {
                 return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).contentType(MediaType.APPLICATION_JSON).body(null);
             }
             else {

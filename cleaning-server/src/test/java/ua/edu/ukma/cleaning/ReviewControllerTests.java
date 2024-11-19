@@ -26,7 +26,7 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import ua.edu.ukma.cleaning.security.JwtService;
 
 @Slf4j
-public class ReviewControllerTests extends IntegrationTest {
+class ReviewControllerTests extends IntegrationTest {
     @MockBean
     protected JwtService jwtService;
 
@@ -39,13 +39,13 @@ public class ReviewControllerTests extends IntegrationTest {
         Mockito.when(jwtService.extractUser(employeeToken)).thenReturn(employee);
         Mockito.when(jwtService.extractUser(adminToken)).thenReturn(admin);
         ReviewEntity review = reviewRepository.save(new ReviewEntity(null, 5L, 5L, "good"));
-        orderRepository.save(new OrderEntity(0l, 1100.0,
+        orderRepository.save(new OrderEntity(0L, 1100.0,
                 LocalDateTime.of(2023,8,22,18,0),
                 LocalDateTime.of(2023,9,1,12,0),
                 user.getUsername(),null, null,
                 new AddressDto("Kyiv", "Balzaka", "20", "214", "02224"), review,
                 Status.DONE, Duration.ofHours(2), null));
-        orderRepository.save(new OrderEntity(0l, 1100.0,
+        orderRepository.save(new OrderEntity(0L, 1100.0,
                 LocalDateTime.of(2023,8,22,18,0),
                 LocalDateTime.of(2023,9,1,12,0),
                 user.getUsername(),null, null,
@@ -54,7 +54,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewByIdUnauthorizedTest() {
+    void getReviewByIdUnauthorizedTest() {
         given()
                 .when()
                 .get("/api/orders/review/1")
@@ -64,7 +64,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewByIdEmployeeTest() {
+    void getReviewByIdEmployeeTest() {
         given()
                 .header("Authorization", "Bearer " + employeeToken)
                 .when()
@@ -74,7 +74,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewByIdUserTest() {
+    void getReviewByIdUserTest() {
         ReviewDto reviewDto = given()
                 .header("Authorization", "Bearer " + userToken)
                 .when()
@@ -92,7 +92,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewByIdAdminTest() {
+    void getReviewByIdAdminTest() {
         ReviewDto reviewDto = given()
                 .header("Authorization", "Bearer " + adminToken)
                 .when()
@@ -110,7 +110,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void createReviewWithImageTest() throws IOException {
+    void createReviewWithImageTest() throws IOException {
         OrderForUserDto orderDto = given()
                 .header("Authorization", "Bearer " + userToken)
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
@@ -125,9 +125,9 @@ public class ReviewControllerTests extends IntegrationTest {
 
         ReviewDto reviewDto = orderDto.getReview();
         Assertions.assertNotNull(reviewDto);
-        Assertions.assertEquals(reviewDto.getCleaningRate(), 1L);
-        Assertions.assertEquals(reviewDto.getEmployeeRate(), 1L);
-        Assertions.assertEquals(reviewDto.getDetails(), "hello");
+        Assertions.assertEquals(1L, reviewDto.getCleaningRate());
+        Assertions.assertEquals(1L, reviewDto.getEmployeeRate());
+        Assertions.assertEquals("hello", reviewDto.getDetails());
 
         byte[] originalFileBytes = Files.readAllBytes(Paths.get("src/test/resources/testdata/spring-boot.jpg"));
         byte[] uploadedFileBytes = Files.readAllBytes(Paths.get(storageDirectory + "/review/2.jpg"));
@@ -135,7 +135,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void createReviewWithImageUnsupportedTypeTest() throws IOException {
+    void createReviewWithImageUnsupportedTypeTest() {
         given()
                 .header("Authorization", "Bearer " + userToken)
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
@@ -149,7 +149,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewImageTest() throws IOException {
+    void getReviewImageTest() throws IOException {
         given()
                 .header("Authorization", "Bearer " + userToken)
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
@@ -178,7 +178,7 @@ public class ReviewControllerTests extends IntegrationTest {
     }
 
     @Test
-    public void getReviewWithImageTest() {
+    void getReviewWithImageTest() {
         Assertions.assertFalse(Files.exists(Path.of(storageDirectory + "/review/2.jpg")));
         given()
                 .header("Authorization", "Bearer " + userToken)

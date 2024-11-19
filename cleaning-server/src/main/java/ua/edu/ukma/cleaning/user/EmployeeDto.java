@@ -20,6 +20,6 @@ public class EmployeeDto {
     private String email;
     @NotNull(message = "Role cannot be null")
     private Role role;
-    @Pattern(regexp = "^((\\+38\\s?)?((\\(0[1-9]{2}\\))|(0[1-9]{2}))(\\s|-)?[0-9]{3}(\\s|-)?[0-9]{2}(\\s|-)?[0-9]{2})?$", message = "Phone number should be correct")
+    @Pattern(regexp = "^((\\+38\\s?)?((\\(0[1-9]{2}\\))|(0[1-9]{2}))[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2})?$", message = "Phone number should be correct")
     private String phoneNumber;
 }
