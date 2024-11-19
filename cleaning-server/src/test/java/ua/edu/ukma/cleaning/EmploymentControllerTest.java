@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 
-public class EmploymentControllerTest extends IntegrationTest {
+class EmploymentControllerTest extends IntegrationTest {
     @MockBean
     private JwtService jwtService;
 
@@ -30,7 +30,7 @@ public class EmploymentControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void createEmploymentWithResumeTest() throws IOException {
+    void createEmploymentWithResumeTest() throws IOException {
         Assertions.assertFalse(Files.exists(Path.of(storageDirectory + "/employment/1.pdf")));
         EmploymentDto employmentDto = given()
                 .header("Authorization", "Bearer " + userToken)
@@ -44,7 +44,7 @@ public class EmploymentControllerTest extends IntegrationTest {
         Assertions.assertTrue(Files.exists(Path.of(storageDirectory + "/employment/1.pdf")));
 
         Assertions.assertNotNull(employmentDto);
-        Assertions.assertEquals(employmentDto.getId(), 1);
+        Assertions.assertEquals(1, employmentDto.getId());
 
         byte[] originalFileBytes = Files.readAllBytes(Paths.get("src/test/resources/testdata/practice-4.pdf"));
         byte[] uploadedFileBytes = Files.readAllBytes(Paths.get(storageDirectory + "/employment/1.pdf"));
@@ -52,7 +52,7 @@ public class EmploymentControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void getResumeFromServerTest() throws IOException {
+    void getResumeFromServerTest() throws IOException {
         Assertions.assertFalse(Files.exists(Path.of(storageDirectory + "/employment/1.pdf")));
         given()
                 .header("Authorization", "Bearer " + userToken)

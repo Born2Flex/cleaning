@@ -40,7 +40,7 @@ public class AddressConverter implements AttributeConverter<AddressDto, String> 
             return null;
         }
         String[] pieces = dbData.split(SEPARATOR);
-        if (pieces == null || pieces.length == 0) {
+        if (pieces.length == 0) {
             return null;
         }
         AddressDto addressDto = new AddressDto();

@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.commercialProposal;
+package ua.edu.ukma.cleaning.commercial.proposal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

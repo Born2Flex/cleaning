@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import ua.edu.ukma.cleaning.address.AddressDto;
-import ua.edu.ukma.cleaning.commercialProposal.CommercialProposalEntity;
+import ua.edu.ukma.cleaning.commercial.proposal.CommercialProposalEntity;
 import ua.edu.ukma.cleaning.order.review.ReviewEntity;
 
 import java.time.Duration;

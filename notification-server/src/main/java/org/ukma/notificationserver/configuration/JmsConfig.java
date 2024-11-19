@@ -6,12 +6,11 @@ import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFac
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
 
 @Configuration
 public class JmsConfig {
     @Bean
-    public JmsListenerContainerFactory<?> queueFactory(
+    public DefaultJmsListenerContainerFactory queueFactory(
             ConnectionFactory connectionFactory,
             DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -21,7 +20,7 @@ public class JmsConfig {
     }
 
     @Bean
-    public JmsListenerContainerFactory<?> topicFactory(
+    public DefaultJmsListenerContainerFactory topicFactory(
             ConnectionFactory connectionFactory,
             DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();

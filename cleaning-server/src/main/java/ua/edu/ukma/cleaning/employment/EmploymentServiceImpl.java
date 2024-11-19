@@ -12,9 +12,9 @@ import ua.edu.ukma.cleaning.storage.StorageService;
 import ua.edu.ukma.cleaning.user.UserServerClient;
 import ua.edu.ukma.cleaning.user.UserServerClientFeign;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.AlreadyAppliedException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.CantChangeEntityException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.AlreadyAppliedException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.CantChangeEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
 import java.time.LocalDateTime;
@@ -52,7 +52,6 @@ public class EmploymentServiceImpl implements EmploymentService {
     @Override
     public Boolean succeed(Long userId) {
         //TODO implement user role change functionality
-//        UserDto user = userServerClient.getById(userId);
         UserDto user = userServerClientFeign.getById(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
         repository.delete(employmentRequest);

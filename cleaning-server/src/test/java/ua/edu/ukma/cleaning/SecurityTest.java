@@ -1,9 +1,7 @@
 package ua.edu.ukma.cleaning;
 
 import groovy.util.logging.Slf4j;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import ua.edu.ukma.cleaning.address.AddressDto;
@@ -18,15 +16,8 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 @Slf4j
-public class SecurityTest extends IntegrationTest {
+class SecurityTest extends IntegrationTest {
     private final UserServerJwtService userServerJwtService = new UserServerJwtService();
-
-    @Override
-    @BeforeEach
-    void setUp() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = serverPort;
-    }
 
     @Test
     void userCanCreateOrderTest() {

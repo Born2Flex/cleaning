@@ -19,9 +19,9 @@ public class JwtService {
     @Value("${jwt.secret}")
     public String secret;
 
-    private class JWTClaims {
-        public static String ROLE_CLAIM = "role";
-        public static String ID_CLAIM = "id";
+    private static class JWTClaims {
+        public static final String ROLE_CLAIM = "role";
+        public static final String ID_CLAIM = "id";
     }
 
     private Key getSignKey() {

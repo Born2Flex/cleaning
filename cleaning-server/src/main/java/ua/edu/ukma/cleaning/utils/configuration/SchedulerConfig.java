@@ -1,7 +1,7 @@
 package ua.edu.ukma.cleaning.utils.configuration;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,11 +18,10 @@ import java.util.List;
 @Configuration
 @Slf4j
 @EnableScheduling
+@RequiredArgsConstructor
 public class SchedulerConfig {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private OrderNotificationSender notificationSender;
+    private final OrderRepository orderRepository;
+    private final OrderNotificationSender notificationSender;
 
     @Scheduled(cron = "0 0 8 * * *")
     public void setOrdersStatusPreparing() {

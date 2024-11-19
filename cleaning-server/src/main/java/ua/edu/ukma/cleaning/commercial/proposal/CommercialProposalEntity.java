@@ -1,11 +1,11 @@
-package ua.edu.ukma.cleaning.commercialProposal;
+package ua.edu.ukma.cleaning.commercial.proposal;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.Duration;
 
@@ -14,7 +14,7 @@ import java.time.Duration;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE commercial_proposals SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@SQLRestriction(value = "deleted=false")
 @Table(name = "commercial_proposals")
 public class CommercialProposalEntity {
     @Id

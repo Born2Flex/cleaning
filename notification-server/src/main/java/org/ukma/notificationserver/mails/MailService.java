@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.ukma.notificationserver.jms.models.UserEvent;
 import org.ukma.notificationserver.metrics.EmailProcessingTimeMetric;
-import org.ukma.notificationserver.metrics.FailedEmailsCountMetric;
 import org.ukma.notificationserver.models.OrderNotification;
 import org.ukma.notificationserver.models.OrderNotificationType;
 
@@ -20,9 +19,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @RequiredArgsConstructor
 public class MailService {
+    private static final String MAIL_SUBJECT = "Notification";
     private final JavaMailSender javaMailSender;
     private final EmailProcessingTimeMetric emailProcessingTimeMetric;
-    private final FailedEmailsCountMetric failedEmailsCountMetric;
     private final AtomicInteger countOfFailed = new AtomicInteger(0);
 
     public void processOrderNotification(OrderNotification order) {
@@ -33,14 +32,7 @@ public class MailService {
     }
 
     public void sendOrderCreationMail(OrderNotification order) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(order.getEmail());
-        mailMessage.setSubject("Your order");
-        mailMessage.setText("Thank you for your order with number " + order.getOrderId()
-                + ". Our administrator will verify it. You can check status of your order, in our website "
-                + ", orders tab.\n We hope you're having a great day!\n\n"
-                + "Best regards,\n"
-                + "The Spring Boot Cleaning Team");
+        SimpleMailMessage mailMessage = getSimpleMailMessage(order);
         try {
             javaMailSender.send(mailMessage);
             emailProcessingTimeMetric.recordExecutionTime(order.getCreationTime(), LocalDateTime.now());
@@ -50,10 +42,22 @@ public class MailService {
         }
     }
 
+    private static SimpleMailMessage getSimpleMailMessage(OrderNotification order) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(order.getEmail());
+        mailMessage.setSubject("Your order");
+        mailMessage.setText("Thank you for your order with number " + order.getOrderId()
+                + ". Our administrator will verify it. You can check status of your order, in our website "
+                + ", orders tab.\n We hope you're having a great day!\n\n"
+                + "Best regards,\n"
+                + "The Spring Boot Cleaning Team");
+        return mailMessage;
+    }
+
     public void sendOrderNotificationForUser(OrderNotification order) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(order.getEmail());
-        mailMessage.setSubject("Notification");
+        mailMessage.setSubject(MAIL_SUBJECT);
         mailMessage.setText("Good morning, our team preparing to start your order " + order.getOrderId()
                 + ". Wait for our team at: " + order.getOrderTime().toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME)
                 + ".\n We hope you're having a great day!\n\n"
@@ -71,7 +75,7 @@ public class MailService {
     public void sendUserCreateEmail(UserEvent user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.email());
-        mailMessage.setSubject("Notification");
+        mailMessage.setSubject(MAIL_SUBJECT);
         mailMessage.setText(String.format("""
                 Dear %s,
                 
@@ -93,7 +97,7 @@ public class MailService {
     public void sendUserDeletionEmail(UserEvent user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.email());
-        mailMessage.setSubject("Notification");
+        mailMessage.setSubject(MAIL_SUBJECT);
         mailMessage.setText(String.format("""
                 Dear %s,
                 

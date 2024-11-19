@@ -9,6 +9,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.FileProcessingException;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -35,7 +37,7 @@ public class StorageService {
             Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             log.error("Failed to store file: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to store file", e);
+            throw new FileProcessingException("Failed to store file", e);
         }
     }
     public ResourceWithType loadAsResource(Storageable storageable) {
@@ -45,7 +47,7 @@ public class StorageService {
                 return new ResourceWithType(resource.get(), mimeType);
             }
         }
-        throw new RuntimeException("File not found for dir: " + storageable.getDir() + " and id: " + storageable.getId());
+        throw new FileProcessingException("File not found for dir: " + storageable.getDir() + " and id: " + storageable.getId());
     }
     private Optional<Resource> findResource(Storageable storageable, String mimeType) {
         Path filePath = Paths.get(rootDir, storageable.getDir())
@@ -83,7 +85,7 @@ public class StorageService {
             MimeType mimeTypeObj = allTypes.forName(mimeType);
             return mimeTypeObj.getExtension();
         } catch (MimeTypeException e) {
-            throw new RuntimeException("Failed to get extension for mime type: " + mimeType, e);
+            throw new FileProcessingException("Failed to get extension for mime type: " + mimeType, e);
         }
     }
 }

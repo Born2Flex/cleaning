@@ -22,9 +22,9 @@ public class JwtService {
     @Value("${jwt.secret}")
     public String secret;
 
-    private class JWTClaims {
-        public static String ROLE_CLAIM = "role";
-        public static String ID_CLAIM = "id";
+    private static class JWTClaims {
+        private static final String ROLE_CLAIM = "role";
+        private static final String ID_CLAIM = "id";
     }
 
     public String generateToken(String userName, Role role, Long id) {
@@ -74,11 +74,11 @@ public class JwtService {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

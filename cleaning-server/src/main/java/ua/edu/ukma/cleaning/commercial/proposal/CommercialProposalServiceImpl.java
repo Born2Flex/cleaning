@@ -1,12 +1,12 @@
-package ua.edu.ukma.cleaning.commercialProposal;
+package ua.edu.ukma.cleaning.commercial.proposal;
 
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.NoSuchEntityException;
-import ua.edu.ukma.cleaning.utils.exceptionHandler.exceptions.ProposalNameDuplicateException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.NoSuchEntityException;
+import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.ProposalNameDuplicateException;
 
 import java.util.List;
 
@@ -25,15 +25,14 @@ public class CommercialProposalServiceImpl implements CommercialProposalService 
             throw new ProposalNameDuplicateException("Commercial proposal name should be unique!");
         }
         log.info("Created commercial proposal with id = {}", commercialProposal.getId());
-        CommercialProposalDto createdProposal = mapper.toDto(commercialProposalRepository.save(mapper.toEntity(commercialProposal)));
-        return createdProposal;
+        return mapper.toDto(commercialProposalRepository.save(mapper.toEntity(commercialProposal)));
     }
 
     @Override
     public CommercialProposalDto update(CommercialProposalDto commercialProposal) {
         CommercialProposalEntity proposal = commercialProposalRepository.findById(commercialProposal.getId()).orElseThrow(() -> {
             log.info("Can`t find proposal by id: " + commercialProposal.getId());
-            throw new NoSuchEntityException("Can`t find proposal by id: " + commercialProposal.getId());
+            return new NoSuchEntityException("Can`t find proposal by id: " + commercialProposal.getId());
         });
         if (!proposal.getName().equals(commercialProposal.getName())
                 && commercialProposalRepository.findCommercialProposalEntityByName(commercialProposal.getName()).isPresent() ) {
