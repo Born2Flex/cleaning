@@ -3,17 +3,21 @@ package ua.edu.ukma.cleaning.user;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
 import java.util.List;
 
-@FeignClient(name = "user-server", path = "/api/users")
+@FeignClient(name = "user-server", path = "/api")
 public interface UserServerClientFeign {
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     UserDto getById(@PathVariable Long id);
 
-    @GetMapping("/by-role/{role}")
+    @GetMapping("/users/by-role/{role}")
     List<UserListDto> getAllByRole(@PathVariable Role role);
+
+    @GetMapping("/auth/login")
+    JwtResponse login(@RequestBody AuthRequest authRequest);
 }

@@ -9,7 +9,7 @@ import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
 import ua.edu.ukma.cleaning.user.EmployeeDto;
 import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.user.UserServerClient;
+import ua.edu.ukma.cleaning.user.UserServerClientFeign;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeAvailabilityServiceImpl implements EmployeeAvailabilityService {
     private final OrderRepository orderRepository;
-    private final UserServerClient userServerClient;
+    private final UserServerClientFeign userServerClient;
     private final EmployeeMapper mapper;
 
     @Override
