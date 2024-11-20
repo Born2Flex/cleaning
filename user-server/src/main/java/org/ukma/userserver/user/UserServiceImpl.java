@@ -58,7 +58,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto user) {
-        UserEntity userEntity = SecurityContextAccessor.getAuthenticatedUser();
+        UserEntity userEntity;
+        if (SecurityContextAccessor.getAuthenticatedUser().getRole().equals(Role.CLEANING_SERVER))
+            userEntity = userRepository.findById(user.getId()).orElseThrow(
+                    () -> new NoSuchEntityException("Can't find user by id: " + user.getId())
+            );
+        else
+            userEntity = SecurityContextAccessor.getAuthenticatedUser();
         userMapper.updateFields(userEntity, user);
         log.debug("Data of user id = {} successfully updated", userEntity.getId());
         return userMapper.toDto(userRepository.save(userEntity));

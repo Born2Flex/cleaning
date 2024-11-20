@@ -9,6 +9,7 @@ import ua.edu.ukma.cleaning.order.OrderRepository;
 import ua.edu.ukma.cleaning.order.Status;
 import ua.edu.ukma.cleaning.storage.ResourceWithType;
 import ua.edu.ukma.cleaning.storage.StorageService;
+import ua.edu.ukma.cleaning.user.Role;
 import ua.edu.ukma.cleaning.user.UserServerClientFeign;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.AlreadyAppliedException;
@@ -48,9 +49,10 @@ public class EmploymentServiceImpl implements EmploymentService {
     @Transactional
     @Override
     public Boolean succeed(Long userId) {
-        //TODO implement user role change functionality
         UserDto user = userServerClient.getById(userId);
         EmploymentEntity employmentRequest = findEmploymentOrThrow(userId);
+        user.setRole(Role.EMPLOYEE);
+        userServerClient.updateUser(user);
         repository.delete(employmentRequest);
         log.debug("Admin id = {} accepted Employment request id = {}",
                 SecurityContextAccessor.getAuthenticatedUserId(), employmentRequest.getId());
