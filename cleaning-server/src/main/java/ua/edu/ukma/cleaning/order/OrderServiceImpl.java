@@ -22,6 +22,7 @@ import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.CantChangeEntityE
 import ua.edu.ukma.cleaning.utils.exception.handler.exceptions.NoSuchEntityException;
 import ua.edu.ukma.cleaning.security.SecurityContextAccessor;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -227,5 +228,14 @@ public class OrderServiceImpl implements OrderService, UserDeletingProcessor {
         userOrders.forEach(order -> order.setStatus(Status.CANCELLED));
         orderRepository.saveAll(userOrders);
         log.info("All orders of user {} was canceled", deleteEvent.email());
+    }
+
+    public List<OrderListDto> getUpcomingOrders() {
+        List<OrderEntity> orders = orderRepository.findAllByOrderTimeBetweenAndStatus(
+            LocalDate.now().atStartOfDay(),
+            LocalDate.now().atStartOfDay().plusDays(1),
+            Status.PREPARING
+        );
+        return orderMapper.toListDto(orders);
     }
 }

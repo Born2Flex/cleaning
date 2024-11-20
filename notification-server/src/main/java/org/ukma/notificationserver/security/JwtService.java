@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.security;
+package org.ukma.notificationserver.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,8 +7,8 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import ua.edu.ukma.cleaning.user.AuthenticatedUser;
-import ua.edu.ukma.cleaning.user.Role;
+import org.ukma.notificationserver.user.AuthenticatedUser;
+import org.ukma.notificationserver.user.Role;
 
 import java.security.Key;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     public String secret;
 
-    private static class JWTClaims {
+    private class JWTClaims {
         public static final String ROLE_CLAIM = "role";
         public static final String ID_CLAIM = "id";
     }
@@ -62,7 +62,7 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

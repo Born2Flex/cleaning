@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users
     patronymic   VARCHAR(255) DEFAULT NULL,
     email        VARCHAR(255) NOT NULL UNIQUE,
     password     VARCHAR(255) NOT NULL,
-    role         VARCHAR(255) NOT NULL CHECK (role IN ('USER', 'EMPLOYEE', 'ADMIN', 'CLEANING_SERVER')),
+    role         VARCHAR(255) NOT NULL CHECK (role IN ('USER', 'EMPLOYEE', 'ADMIN', 'CLEANING_SERVER', 'NOTIFICATION_SERVER')),
     phone_number VARCHAR(255) DEFAULT NULL UNIQUE
 );
 
@@ -43,3 +43,5 @@ INSERT INTO users (name, surname, patronymic, password, email, phone_number, rol
 VALUES ('Alys', 'Bonner', 'Semenivna', '$2a$10$khRH0cGfqeo6S8uux6o.suCG32m1qxxj60mP3m7eIK3ibWjkB4nXW', 'a.bonner@gmail.com', '+380679831471', 'EMPLOYEE');
 INSERT INTO users (password, email, role)-- password: 0#H)e2LXz{H1
 VALUES ('$2y$10$SOrESJVQVMTAgY.9brTdgOBw5tRG4koemj4tyJKtGXO5NiI.puDOG', 'cleaning.server@system.com', 'CLEANING_SERVER');
+INSERT INTO users (password, email, role)-- password: 0#H)e2LXz{H1
+VALUES ('$2y$10$SOrESJVQVMTAgY.9brTdgOBw5tRG4koemj4tyJKtGXO5NiI.puDOG', 'notification.server@system.com', 'NOTIFICATION_SERVER');

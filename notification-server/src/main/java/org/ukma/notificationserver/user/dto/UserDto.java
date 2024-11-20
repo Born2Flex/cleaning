@@ -1,4 +1,4 @@
-package ua.edu.ukma.cleaning.user.dto;
+package org.ukma.notificationserver.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.cleaning.address.AddressDto;
-import ua.edu.ukma.cleaning.user.Role;
+import org.ukma.notificationserver.address.AddressDto;
+import org.ukma.notificationserver.user.Role;
 
 import java.util.List;
 

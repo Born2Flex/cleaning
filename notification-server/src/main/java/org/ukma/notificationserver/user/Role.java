@@ -1,4 +1,4 @@
-package org.ukma.userserver.user.models;
+package org.ukma.notificationserver.user;
 
 public enum Role {
     USER,
