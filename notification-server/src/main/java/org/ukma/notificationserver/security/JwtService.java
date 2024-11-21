@@ -5,10 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.ukma.notificationserver.user.AuthenticatedUser;
-import org.ukma.notificationserver.user.Role;
 
 import java.security.Key;
 import java.util.Date;
@@ -19,25 +16,9 @@ public class JwtService {
     @Value("${jwt.secret}")
     public String secret;
 
-    private class JWTClaims {
-        public static final String ROLE_CLAIM = "role";
-        public static final String ID_CLAIM = "id";
-    }
-
     private Key getSignKey() {
         byte[] keyBytes= Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    public AuthenticatedUser extractUser(String token) {
-        Long id = extractClaim(token, claims -> claims.get(JWTClaims.ID_CLAIM, Long.class));
-        Role role = Role.valueOf(extractClaim(token, claims -> claims.get(JWTClaims.ROLE_CLAIM, String.class)));
-        String username = extractUsername(token);
-        return new AuthenticatedUser(id, role, username);
-    }
-
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
@@ -60,11 +41,6 @@ public class JwtService {
 
     public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
-    }
-
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 }

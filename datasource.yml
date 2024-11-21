@@ -5,7 +5,7 @@ datasources:
     type: prometheus
     access: proxy
     orgId: 1
-    url: http://host.docker.internal:8088
+    url: http://host.docker.internal:8188
     basicAuth: true
     basicAuthUser: admin
     secureJsonData:

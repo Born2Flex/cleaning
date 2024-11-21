@@ -12,10 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
-import ua.edu.ukma.cleaning.user.AuthRequest;
-import ua.edu.ukma.cleaning.user.JwtResponse;
-import ua.edu.ukma.cleaning.user.Role;
-import ua.edu.ukma.cleaning.user.UserServerClientFeign;
+import ua.edu.ukma.cleaning.user.*;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
 
@@ -28,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("feign-client-test")
 class UserServerClientFeignTest {
+    @Autowired
+    private AuthClientFeign authClientFeign;
     @Autowired
     private UserServerClientFeign userServerClientFeign;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -118,7 +117,7 @@ class UserServerClientFeignTest {
                         """)));
 
         AuthRequest expected = new AuthRequest("user", "password");
-        JwtResponse jwtResponse = userServerClientFeign.login(expected);
+        JwtResponse jwtResponse = authClientFeign.login(expected);
 
         assertNotNull(jwtResponse);
         assertEquals("jwt-token", jwtResponse.getAccessToken());
