@@ -23,7 +23,7 @@ import java.io.File;
 @Slf4j
 @Sql(value = {"/init2.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = "storage.root-dir=src/test/resources/storage")
+        properties = {"storage.root-dir=src/test/resources/storage", "spring.cloud.discovery.enabled=false", "grpc.server.port=0"})
 public class IntegrationTest {
     @LocalServerPort
     protected int serverPort;
