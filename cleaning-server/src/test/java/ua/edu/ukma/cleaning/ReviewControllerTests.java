@@ -116,7 +116,7 @@ class ReviewControllerTests extends IntegrationTest {
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
                 .multiPart("image", new File("src/test/resources/testdata/spring-boot.jpg"), "image/jpeg")
                 .when()
-                .post("/api/orders/review/2/with-image")
+                .post("/api/orders/review/with-image")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -141,7 +141,7 @@ class ReviewControllerTests extends IntegrationTest {
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
                 .multiPart("image", new File("src/test/resources/testdata/practice-4.pdf"), "application/pdf")
                 .when()
-                .post("/api/orders/review/2/with-image")
+                .post("/api/orders/review/with-image")
                 .then()
                 .statusCode(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
                 .contentType("application/json");
@@ -155,7 +155,7 @@ class ReviewControllerTests extends IntegrationTest {
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
                 .multiPart("image", new File("src/test/resources/testdata/spring-boot.jpg"), "image/jpeg")
                 .when()
-                .post("/api/orders/review/2/with-image")
+                .post("/api/orders/review/with-image")
                 .then()
                 .statusCode(200)
                 .contentType("application/json");
@@ -185,7 +185,7 @@ class ReviewControllerTests extends IntegrationTest {
                 .multiPart("review", "{\"orderId\": 2,\"cleaningRate\": 1,\"employeeRate\": 1,\"details\": \"hello\"}", "application/json")
                 .multiPart("image", new File("src/test/resources/testdata/spring-boot.jpg"), "image/jpeg")
                 .when()
-                .post("/api/orders/review/2/with-image")
+                .post("/api/orders/review/with-image")
                 .then()
                 .statusCode(200)
                 .contentType("application/json");

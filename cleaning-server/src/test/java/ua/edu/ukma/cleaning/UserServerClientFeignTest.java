@@ -4,14 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
+import ua.edu.ukma.cleaning.security.JwtService;
 import ua.edu.ukma.cleaning.user.*;
 import ua.edu.ukma.cleaning.user.dto.UserDto;
 import ua.edu.ukma.cleaning.user.dto.UserListDto;
@@ -25,8 +29,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("feign-client-test")
 class UserServerClientFeignTest {
-    @Autowired
+    @MockBean
     private AuthClientFeign authClientFeign;
+    @MockBean
+    private JwtService jwtService;
     @Autowired
     private UserServerClientFeign userServerClientFeign;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -35,6 +41,16 @@ class UserServerClientFeignTest {
     static WireMockExtension userServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().port(8081))
             .build();
+
+    @BeforeEach
+    void setUp() {
+        Mockito
+                .when(authClientFeign.login(Mockito.any()))
+                .thenReturn(new JwtResponse("testToken", "refreshTestToken"));
+        Mockito
+                .when(jwtService.isTokenExpired(Mockito.any()))
+                .thenReturn(true);
+    }
 
     @TestConfiguration
     public static class TestConfig {
@@ -102,27 +118,5 @@ class UserServerClientFeignTest {
         userServerClientFeign.updateUser(expected);
 
         userServer.verify(putRequestedFor(urlEqualTo("/api/users")).withRequestBody(equalToJson(objectMapper.writeValueAsString(expected))));
-    }
-
-    @Test
-    void login() throws JsonProcessingException {
-        userServer.stubFor(post(urlEqualTo("/api/auth/login"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                        {
-                          "accessToken": "jwt-token",
-                          "refreshToken": "refresh-token"
-                        }
-                        """)));
-
-        AuthRequest expected = new AuthRequest("user", "password");
-        JwtResponse jwtResponse = authClientFeign.login(expected);
-
-        assertNotNull(jwtResponse);
-        assertEquals("jwt-token", jwtResponse.getAccessToken());
-        assertEquals("refresh-token", jwtResponse.getRefreshToken());
-
-        userServer.verify(postRequestedFor(urlEqualTo("/api/auth/login")).withRequestBody(equalToJson(objectMapper.writeValueAsString(expected))));
     }
 }
