@@ -10,6 +10,7 @@ public interface UserService {
     UserDto create(UserRegistrationDto user);
     UserDto update(UserDto user);
     UserDto getUser();
+    UserDto getUserById(Long id);
     UserDto getByEmail(String email);
     UserDto updatePassword(UserPasswordDto user);
     Boolean deleteById(Long id);

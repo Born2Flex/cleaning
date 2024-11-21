@@ -41,6 +41,8 @@ public class EmploymentServiceImpl implements EmploymentService {
         employmentRequest.setCreationTime(LocalDateTime.now());
         employmentRequest.setApplicantId(SecurityContextAccessor.getAuthenticatedUserId());
         EmploymentDto dto = employmentMapper.toDto(repository.save(employmentRequest));
+        UserDto user = userServerClient.getById(SecurityContextAccessor.getAuthenticatedUserId());
+        dto.setApplicant(user);
         storageService.storeFile(employmentRequest, resumeFile);
         log.info("Created new employment request with id = {}", employmentRequest.getId());
         return dto;

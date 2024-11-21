@@ -23,11 +23,18 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "Get user by id", description = "Get user by id")
+    @Operation(summary = "Get user", description = "Get user")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping
     public UserDto getUser() {
         return userService.getUser();
+    }
+
+    @Operation(summary = "Get user by id", description = "Get user by id")
+    @PreAuthorize("hasAuthority('ROLE_CLEANING_SERVER')")
+    @GetMapping("/{id}")
+    public UserDto getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
     @Operation(summary = "Get user by email", description = "Get user by email")

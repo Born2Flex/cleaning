@@ -76,6 +76,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUserById(Long id) {
+        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("Can't find user by id: " + id)));
+    }
+
+    @Override
     public UserDto getByEmail(String email) {
         UserEntity userEntity = userRepository.findUserEntityByEmail(email).orElseThrow(
                 () -> new NoSuchEntityException("Can`t find user by email: " + email)
