@@ -6,6 +6,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.edu.ukma.cleaning.employment.EmploymentDto;
 import ua.edu.ukma.cleaning.security.JwtService;
+import ua.edu.ukma.cleaning.user.AuthClientFeign;
+import ua.edu.ukma.cleaning.user.UserServerClientFeign;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,10 @@ import static io.restassured.RestAssured.given;
 class EmploymentControllerTest extends IntegrationTest {
     @MockBean
     private JwtService jwtService;
+    @MockBean
+    private UserServerClientFeign userServerClientFeign;
+    @MockBean
+    private AuthClientFeign authClientFeign;
 
     @Override
     @BeforeEach
