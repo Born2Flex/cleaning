@@ -33,7 +33,7 @@ public class GrpcClientRequestInterceptor implements ClientInterceptor  {
                 if(token == null || jwtService.isTokenExpired(token)) {
                     token = userServerClient.login(new AuthRequest(username, password)).getAccessToken();
                 }
-                headers.put(Metadata.Key.of(HttpHeaders.AUTHORIZATION, Metadata.ASCII_STRING_MARSHALLER), token);
+                headers.put(Metadata.Key.of(HttpHeaders.AUTHORIZATION, Metadata.ASCII_STRING_MARSHALLER), "Bearer " + token);
                 super.start(responseListener, headers);
             }
         };
